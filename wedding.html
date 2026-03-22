@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Our Wedding - Main Ceremony</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700;800&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <header class="topbar">
+    <nav class="container nav-grid">
+      <a class="brand" href="index.html">V &amp; S</a>
+      <div class="nav-links">
+        <a href="index.html">Home</a>
+        <a href="event.html">Events</a>
+        <a href="venue.html">Venue</a>
+      </div>
+    </nav>
+  </header>
+
+  <main class="container">
+    <section class="section-block">
+      <h2>Wedding Ceremony</h2>
+      <p>The main wedding ceremony was the pinnacle of our celebrations. Exchanging vows amidst flowers, music, and the blessings of our families, it was a day we'll cherish forever.</p>
+    </section>
+
+    <section class="gallery-section">
+      <h3>Wedding Day Photos</h3>
+      <div class="carousel" id="carousel">
+        <button class="carousel-btn prev" data-dir="prev" aria-label="Previous image">‹</button>
+        <div class="carousel-track">
+          <img src="images/photo5.jpg" alt="Wedding photo 1" class="carousel-slide active" />
+          <img src="images/photo6.jpg" alt="Wedding photo 2" class="carousel-slide" />
+          <img src="images/photo7.jpg" alt="Wedding photo 3" class="carousel-slide" />
+        </div>
+        <button class="carousel-btn next" data-dir="next" aria-label="Next image">›</button>
+      </div>
+    </section>
+
+    <section class="section-block video-block">
+      <h3>Wedding Ceremony Video</h3>
+      <div class="video-wrap">
+        <iframe width="560" height="315" src="https://www.youtube-nocookie.com/embed/ScMzIvxBSi4" title="YouTube video player" frameborder="0" allow="accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+      </div>
+    </section>
+
+    <section class="event-nav-buttons">
+      <h3>Explore More Events</h3>
+      <div class="event-grid">
+        <a href="roka.html" class="button-89">Roka</a>
+        <a href="engagement.html" class="button-89">Engagement</a>
+        <a href="sangeet.html" class="button-89">Sangeet</a>
+        <a href="haldi.html" class="button-89">Haldi</a>
+        <a href="reception.html" class="button-89">Reception</a>
+      </div>
+    </section>
+
+  </main>
+
+  <footer class="site-footer">
+    <p>Thank you for being part of our journey.</p>
+    <p style="margin-top: 0.8rem; font-style: italic; color: var(--gold);">Two hearts. Two families. One beautiful beginning.</p>
+  </footer>
+
+  <script>
+    const slides = Array.from(document.querySelectorAll('.carousel-slide'));
+    const prevBtn = document.querySelector('.carousel-btn.prev');
+    const nextBtn = document.querySelector('.carousel-btn.next');
+    let activeIndex = 0;
+
+    const updateCarousel = (index) => {
+      slides.forEach((slide, i) => {
+        slide.classList.toggle('active', i === index);
+      });
+    };
+
+    const changeSlide = (dir) => {
+      activeIndex = (activeIndex + dir + slides.length) % slides.length;
+      updateCarousel(activeIndex);
+    };
+
+    prevBtn.addEventListener('click', () => changeSlide(-1));
+    nextBtn.addEventListener('click', () => changeSlide(1));
+
+    // Auto-slide every 10 seconds
+    setInterval(() => changeSlide(1), 10000);
+  </script>
+</body>
+</html>
