@@ -6,26 +6,26 @@
   <title>Our Wedding - Gallery</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Kaushan+Script&family=Playfair+Display:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,400&family=Montserrat:wght@300;400;500&family=Cinzel+Decorative:wght@400;700&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="style.css" />
   <style>
-    .gallery-header {
-      text-align: center;
-      margin-bottom: 2rem;
-      padding: 2rem 1rem 0;
-    }
-
-    .gallery-header h2 {
-      font-size: 2rem;
-      color: var(--maroon);
-    }
-
     .gallery-container {
       width: 100%;
       perspective: 1000px;
       overflow-x: hidden;
-      padding: 2rem 0;
-      background: var(--bg);
+      padding: 6rem 0 14rem;
+      background: radial-gradient(circle at 50% 0%, #b30000 0%, #4a0000 70%, #1a0000 100%);
+      position: relative;
+      box-shadow: inset 0 0 150px rgba(0,0,0,0.8);
+    }
+
+    .gallery-container::before {
+      content: "";
+      position: absolute;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: linear-gradient(180deg, rgba(255, 255, 255, 0.12) 0%, transparent 50%);
+      pointer-events: none;
+      z-index: 2;
     }
 
     .wall-container {
@@ -100,7 +100,7 @@
       left: 0;
       width: 100%;
       height: 100%;
-      background: linear-gradient(to bottom, transparent, rgba(139, 0, 0, 0.1));
+      background: linear-gradient(to bottom, transparent 0%, rgba(26, 0, 0, 0.95) 100%);
       border-radius: 8px;
     }
 
@@ -118,14 +118,24 @@
       }
     }
   </style>
-</head>
 <body>
   <header class="topbar">
     <nav class="container nav-grid">
       <a class="brand" href="index.html">V &amp; S</a>
       <div class="nav-links">
         <a href="index.html">Home</a>
-        <a href="event.html">Our Story</a>
+        <a href="couple.html">The Couple</a>
+        <div class="dropdown">
+          <a href="event.html">Our Story</a>
+          <div class="dropdown-content">
+            <a href="roka.html">Roka</a>
+            <a href="engagement.html">Engagement</a>
+            <a href="sangeet.html">Sangeet</a>
+            <a href="haldi.html">Haldi</a>
+            <a href="wedding.html">Wedding</a>
+            <a href="reception.html">Reception</a>
+          </div>
+        </div>
         <a href="venue.html">Venue</a>
         <a href="gallery.html">Gallery</a>
       </div>
@@ -133,20 +143,30 @@
   </header>
 
   <main>
-    <div class="gallery-header">
-      <h2>Our Wedding Diary</h2>
-    </div>
-
     <div class="gallery-container">
       <div class="wall-container" id="main-wall"></div>
     </div>
   </main>
 
   <footer class="site-footer">
-    <p>Thank you for being part of our journey.</p>
-    <p style="margin-top: 0.8rem; font-style: italic; color: var(--gold);">Two hearts. Two families. One beautiful beginning.</p>
+    <div class="container footer-compact-row">
+      <div class="countdown" aria-live="polite">
+        <div><span id="days">0</span><small>Days</small></div>
+        <div><span id="hours">0</span><small>Hours</small></div>
+        <div><span id="minutes">0</span><small>Minutes</small></div>
+        <div><span id="seconds">0</span><small>Seconds</small></div>
+      </div>
+      <p class="footer-quote-inline">Two hearts. Two families. One beautiful beginning.</p>
+      <div class="wedding-seal">
+        <div class="seal-inner">
+          <span class="seal-month">NOV</span>
+          <span class="seal-day">20</span>
+          <span class="seal-year">2026</span>
+        </div>
+      </div>
+    </div>
   </footer>
-
+  <script src="countdown.js"></script>
   <script>
     const NUM_PHOTOS = 8;
     const NUM_ROWS = 1;
