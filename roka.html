@@ -6,10 +6,8 @@
   <title>Our Wedding - Roka</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700;800&family=Kaushan+Script&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,400&family=Montserrat:wght@300;400;500&family=Cinzel+Decorative:wght@400;700&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="style.css" />
-  <!-- Swiper CSS -->
-  <link rel="stylesheet" href="https://unpkg.com/swiper/swiper-bundle.min.css" />
 </head>
 <body>
   <header class="topbar">
@@ -17,7 +15,18 @@
       <a class="brand" href="index.html">V &amp; S</a>
       <div class="nav-links">
         <a href="index.html">Home</a>
-        <a href="event.html">Our Story</a>
+        <a href="couple.html">The Couple</a>
+        <div class="dropdown">
+          <a href="event.html">Our Story</a>
+          <div class="dropdown-content">
+            <a href="roka.html">Roka</a>
+            <a href="engagement.html">Engagement</a>
+            <a href="sangeet.html">Sangeet</a>
+            <a href="haldi.html">Haldi</a>
+            <a href="wedding.html">Wedding</a>
+            <a href="reception.html">Reception</a>
+          </div>
+        </div>
         <a href="venue.html">Venue</a>
         <a href="gallery.html">Gallery</a>
       </div>
@@ -32,103 +41,24 @@
 
     <section class="gallery-section">
       <h3>Roka Memories</h3>
-      <div class="main-slider loading">
-        <div class="swiper-wrapper">
-          <div class="swiper-slide">
-            <div class="slide-bgimg" style="background-image: url('images/photo1.jpg');"></div>
-            <div class="content">
-              <div class="title">Our Journey Begins</div>
-              <div class="caption">The first moments of our beautiful story together.</div>
-            </div>
-          </div>
-          <div class="swiper-slide">
-            <div class="slide-bgimg" style="background-image: url('images/photo2.jpg');"></div>
-            <div class="content">
-              <div class="title">Family & Friends</div>
-              <div class="caption">Surrounded by the love of those who mean the most to us.</div>
-            </div>
-          </div>
-          <div class="swiper-slide">
-            <div class="slide-bgimg" style="background-image: url('images/photo3.jpg');"></div>
-            <div class="content">
-              <div class="title">Precious Moments</div>
-              <div class="caption">Capturing the joy and laughter of our special day.</div>
-            </div>
-          </div>
-          <div class="swiper-slide">
-            <div class="slide-bgimg" style="background-image: url('images/photo4.jpg');"></div>
-            <div class="content">
-              <div class="title">Love & Laughter</div>
-              <div class="caption">The happiness that fills our hearts every day.</div>
-            </div>
-          </div>
-          <div class="swiper-slide">
-            <div class="slide-bgimg" style="background-image: url('images/photo5.jpg');"></div>
-            <div class="content">
-              <div class="title">Forever Together</div>
-              <div class="caption">Building memories that will last a lifetime.</div>
-            </div>
-          </div>
-          <div class="swiper-slide">
-            <div class="slide-bgimg" style="background-image: url('images/photo6.jpg');"></div>
-            <div class="content">
-              <div class="title">Beautiful Celebrations</div>
-              <div class="caption">The traditions and customs that bring us together.</div>
-            </div>
-          </div>
-          <div class="swiper-slide">
-            <div class="slide-bgimg" style="background-image: url('images/photo7.jpg');"></div>
-            <div class="content">
-              <div class="title">Cherished Memories</div>
-              <div class="caption">Moments we'll treasure in our hearts forever.</div>
-            </div>
-          </div>
-          <div class="swiper-slide">
-            <div class="slide-bgimg" style="background-image: url('images/photo8.jpg');"></div>
-            <div class="content">
-              <div class="title">Our Future Awaits</div>
-              <div class="caption">Excited for all the adventures that lie ahead.</div>
-            </div>
-          </div>
-        </div>
-        <div class="swiper-button-prev"></div>
-        <div class="swiper-button-next"></div>
-      </div>
-
-      <div class="nav-slider loading">
-        <div class="swiper-wrapper">
-          <div class="swiper-slide">
-            <img src="images/photo1.jpg" alt="Photo 1" />
-          </div>
-          <div class="swiper-slide">
-            <img src="images/photo2.jpg" alt="Photo 2" />
-          </div>
-          <div class="swiper-slide">
-            <img src="images/photo3.jpg" alt="Photo 3" />
-          </div>
-          <div class="swiper-slide">
-            <img src="images/photo4.jpg" alt="Photo 4" />
-          </div>
-          <div class="swiper-slide">
-            <img src="images/photo5.jpg" alt="Photo 5" />
-          </div>
-          <div class="swiper-slide">
-            <img src="images/photo6.jpg" alt="Photo 6" />
-          </div>
-          <div class="swiper-slide">
-            <img src="images/photo7.jpg" alt="Photo 7" />
-          </div>
-          <div class="swiper-slide">
-            <img src="images/photo8.jpg" alt="Photo 8" />
-          </div>
-        </div>
+      <div class="track-wrapper">
+        <ul class="track">
+          <li class="track__item"><img src="images/photo1.jpg" alt="Roka photo 1"></li>
+          <li class="track__item"><img src="images/photo2.jpg" alt="Roka photo 2"></li>
+          <li class="track__item"><img src="images/photo3.jpg" alt="Roka photo 3"></li>
+          <li class="track__item"><img src="images/photo4.jpg" alt="Roka photo 4"></li>
+          <li class="track__item"><img src="images/photo5.jpg" alt="Roka photo 5"></li>
+          <li class="track__item"><img src="images/photo6.jpg" alt="Roka photo 6"></li>
+          <li class="track__item"><img src="images/photo7.jpg" alt="Roka photo 7"></li>
+          <li class="track__item"><img src="images/photo8.jpg" alt="Roka photo 8"></li>
+        </ul>
       </div>
     </section>
 
     <section class="section-block video-block">
       <h3>Roka Highlights</h3>
       <div class="video-wrap">
-        <iframe width="560" height="315" src="https://www.youtube-nocookie.com/embed/ScMzIvxBSi4" title="YouTube video player" frameborder="0" allow="accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+        <iframe width="560" height="315" src="https://www.youtube-nocookie.com/embed/ni1eXO2JcdA?si=1brqk_1K3wdtL7qf" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
       </div>
     </section>
 
@@ -146,26 +76,52 @@
   </main>
 
   <footer class="site-footer">
-    <p>Thank you for being part of our journey.</p>
-    <p style="margin-top: 0.8rem; font-style: italic; color: var(--gold);">Two hearts. Two families. One beautiful beginning.</p>
+    <div class="container footer-compact-row">
+      <div class="countdown" aria-live="polite">
+        <div><span id="days">0</span><small>Days</small></div>
+        <div><span id="hours">0</span><small>Hours</small></div>
+        <div><span id="minutes">0</span><small>Minutes</small></div>
+        <div><span id="seconds">0</span><small>Seconds</small></div>
+      </div>
+      <p class="footer-quote-inline">Two hearts. Two families. One beautiful beginning.</p>
+      <div class="wedding-seal">
+        <div class="seal-inner">
+          <span class="seal-month">NOV</span>
+          <span class="seal-day">20</span>
+          <span class="seal-year">2026</span>
+        </div>
+      </div>
+    </div>
   </footer>
-
-  <!-- Swiper JS -->
-  <script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
-  <script src="parallax.js"></script>
+  <script src="countdown.js"></script>
   <script>
-    // Ensure continuous looping on roka page slider
-    if (window.mainSlider) {
-      mainSlider.params.loop = true;
-      mainSlider.params.autoplay.delay = 7000;
-      mainSlider.params.autoplay.disableOnInteraction = false;
-      mainSlider.loopCreate && mainSlider.loopCreate();
-      mainSlider.update();
+    window.addEventListener('load', () => {
+      const track = document.querySelector('.track');
+      if (track) {
+        // Duplicate items for a seamless infinite loop
+        track.innerHTML += track.innerHTML;
+        
+        let isPaused = false;
+        const speed = 0.75; // Adjust this for slower/faster flow
 
-      mainSlider.on('reachEnd', function () {
-        setTimeout(() => mainSlider.slideToLoop(0, 0), 10);
-      });
-    }
+        const animate = () => {
+          if (!isPaused) {
+            track.scrollLeft += speed;
+            if (track.scrollLeft >= track.scrollWidth / 2) {
+              track.scrollLeft = 0;
+            }
+          }
+          requestAnimationFrame(animate);
+        };
+
+        track.addEventListener('mouseenter', () => isPaused = true);
+        track.addEventListener('mouseleave', () => isPaused = false);
+        track.addEventListener('touchstart', () => isPaused = true);
+        track.addEventListener('touchend', () => isPaused = false);
+        
+        animate();
+      }
+    });
   </script>
 </body>
 </html>
