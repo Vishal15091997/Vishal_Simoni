@@ -6,7 +6,7 @@
   <title>Our Wedding - Sangeet</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700;800&family=Kaushan+Script&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,400&family=Montserrat:wght@300;400;500&family=Cinzel+Decorative:wght@400;700&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
@@ -15,7 +15,18 @@
       <a class="brand" href="index.html">V &amp; S</a>
       <div class="nav-links">
         <a href="index.html">Home</a>
-        <a href="event.html">Our Story</a>
+        <a href="couple.html">The Couple</a>
+        <div class="dropdown">
+          <a href="event.html">Our Story</a>
+          <div class="dropdown-content">
+            <a href="roka.html">Roka</a>
+            <a href="engagement.html">Engagement</a>
+            <a href="sangeet.html">Sangeet</a>
+            <a href="haldi.html">Haldi</a>
+            <a href="wedding.html">Wedding</a>
+            <a href="reception.html">Reception</a>
+          </div>
+        </div>
         <a href="venue.html">Venue</a>
         <a href="gallery.html">Gallery</a>
       </div>
@@ -30,21 +41,24 @@
 
     <section class="gallery-section">
       <h3>Sangeet Memories</h3>
-      <div class="carousel" id="carousel">
-        <button class="carousel-btn prev" data-dir="prev" aria-label="Previous image">‹</button>
-        <div class="carousel-track">
-          <img src="images/photo3.jpg" alt="Sangeet photo 1" class="carousel-slide active" />
-          <img src="images/photo4.jpg" alt="Sangeet photo 2" class="carousel-slide" />
-          <img src="images/photo5.jpg" alt="Sangeet photo 3" class="carousel-slide" />
-        </div>
-        <button class="carousel-btn next" data-dir="next" aria-label="Next image">›</button>
+      <div class="track-wrapper">
+        <ul class="track">
+          <li class="track__item"><img src="images/photo1.jpg" alt="Sangeet photo 1"></li>
+          <li class="track__item"><img src="images/photo2.jpg" alt="Sangeet photo 2"></li>
+          <li class="track__item"><img src="images/photo3.jpg" alt="Sangeet photo 3"></li>
+          <li class="track__item"><img src="images/photo4.jpg" alt="Sangeet photo 4"></li>
+          <li class="track__item"><img src="images/photo5.jpg" alt="Sangeet photo 5"></li>
+          <li class="track__item"><img src="images/photo6.jpg" alt="Sangeet photo 6"></li>
+          <li class="track__item"><img src="images/photo7.jpg" alt="Sangeet photo 7"></li>
+          <li class="track__item"><img src="images/photo8.jpg" alt="Sangeet photo 8"></li>
+        </ul>
       </div>
     </section>
 
     <section class="section-block video-block">
       <h3>Sangeet Highlights</h3>
       <div class="video-wrap">
-        <iframe width="560" height="315" src="https://www.youtube-nocookie.com/embed/ScMzIvxBSi4" title="YouTube video player" frameborder="0" allow="accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+        <iframe width="560" height="315" src="https://www.youtube-nocookie.com/embed/ni1eXO2JcdA?si=1brqk_1K3wdtL7qf" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
       </div>
     </section>
 
@@ -62,32 +76,52 @@
   </main>
 
   <footer class="site-footer">
-    <p>Thank you for being part of our journey.</p>
-    <p style="margin-top: 0.8rem; font-style: italic; color: var(--gold);">Two hearts. Two families. One beautiful beginning.</p>
+    <div class="container footer-compact-row">
+      <div class="countdown" aria-live="polite">
+        <div><span id="days">0</span><small>Days</small></div>
+        <div><span id="hours">0</span><small>Hours</small></div>
+        <div><span id="minutes">0</span><small>Minutes</small></div>
+        <div><span id="seconds">0</span><small>Seconds</small></div>
+      </div>
+      <p class="footer-quote-inline">Two hearts. Two families. One beautiful beginning.</p>
+      <div class="wedding-seal">
+        <div class="seal-inner">
+          <span class="seal-month">NOV</span>
+          <span class="seal-day">20</span>
+          <span class="seal-year">2026</span>
+        </div>
+      </div>
+    </div>
   </footer>
-
+  <script src="countdown.js"></script>
   <script>
-    const slides = Array.from(document.querySelectorAll('.carousel-slide'));
-    const prevBtn = document.querySelector('.carousel-btn.prev');
-    const nextBtn = document.querySelector('.carousel-btn.next');
-    let activeIndex = 0;
+    window.addEventListener('load', () => {
+      const track = document.querySelector('.track');
+      if (track) {
+        // Duplicate items for a seamless infinite loop
+        track.innerHTML += track.innerHTML;
+        
+        let isPaused = false;
+        const speed = 0.75; 
 
-    const updateCarousel = (index) => {
-      slides.forEach((slide, i) => {
-        slide.classList.toggle('active', i === index);
-      });
-    };
+        const animate = () => {
+          if (!isPaused) {
+            track.scrollLeft += speed;
+            if (track.scrollLeft >= track.scrollWidth / 2) {
+              track.scrollLeft = 0;
+            }
+          }
+          requestAnimationFrame(animate);
+        };
 
-    const changeSlide = (dir) => {
-      activeIndex = (activeIndex + dir + slides.length) % slides.length;
-      updateCarousel(activeIndex);
-    };
-
-    prevBtn.addEventListener('click', () => changeSlide(-1));
-    nextBtn.addEventListener('click', () => changeSlide(1));
-
-    // Auto-slide every 10 seconds
-    setInterval(() => changeSlide(1), 10000);
+        track.addEventListener('mouseenter', () => isPaused = true);
+        track.addEventListener('mouseleave', () => isPaused = false);
+        track.addEventListener('touchstart', () => isPaused = true);
+        track.addEventListener('touchend', () => isPaused = false);
+        
+        animate();
+      }
+    });
   </script>
 </body>
 </html>
