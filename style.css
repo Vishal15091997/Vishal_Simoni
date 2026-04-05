@@ -430,6 +430,7 @@ body.mobile-menu-open .mobile-nav-overlay {
   min-width: 100%;
   width: max-content; /* CRITICAL FIX: Forces container to fit all images before looping */
   animation: scrollMarquee 25s linear infinite;
+  animation: scrollMarquee 50s linear infinite;
   list-style-type: none;
 }
 
@@ -447,6 +448,8 @@ body.mobile-menu-open .mobile-nav-overlay {
   height: 100%;
   aspect-ratio: 1;
   flex-shrink: 0;
+  background: rgba(139, 0, 0, 0.05); /* Placeholder color while heavy images decode */
+  border-radius: 12px;
 }
 
 .track__item img {
