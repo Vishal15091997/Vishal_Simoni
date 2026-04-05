@@ -96,13 +96,16 @@
   <script src="countdown.js"></script>
   <script src="mobile-menu.js"></script>
   <script>
-    window.addEventListener('load', () => {
+    document.addEventListener('DOMContentLoaded', () => {
       const track = document.querySelector('.track');
-      if (track) {
-        const originalItems = Array.from(track.children);
-        
+      if (!track) return;
+
+      const originalItems = Array.from(track.children);
+      const images = Array.from(track.querySelectorAll('img'));
+      let loadedCount = 0;
+
+      const initGallery = () => {
         // Safely duplicate items TWICE for a seamless infinite loop in both directions
-        // This ensures ultra-wide monitors never see an empty edge
         originalItems.forEach(item => track.appendChild(item.cloneNode(true)));
         originalItems.forEach(item => track.appendChild(item.cloneNode(true)));
 
@@ -111,29 +114,25 @@
         const speed = 0.6; // Smoother flow speed
         let maxScroll = 0;
 
-        // Calculate boundary using exact CSS/Math instead of unpredictable DOM painting
+        // Calculate boundary safely
         const calculateMaxScroll = () => {
           const gap = parseFloat(window.getComputedStyle(track).gap) || 0;
-          const itemWidth = originalItems[0].offsetWidth;
+          // Fallback to track height if layout hasn't painted width yet (since aspect-ratio is 1)
+          const itemWidth = originalItems[0].offsetWidth || track.offsetHeight;
           if (itemWidth > 0) {
             maxScroll = (itemWidth + gap) * originalItems.length;
           }
         };
 
         calculateMaxScroll();
-        setTimeout(calculateMaxScroll, 300); // Failsafe for late CSS parsing on slow connections
         window.addEventListener('resize', calculateMaxScroll);
 
         const animate = () => {
           if (!isPaused && maxScroll > 0) {
-            // Sync JS exact position if user manually scrolled (difference > 5px)
             if (Math.abs(track.scrollLeft - exactScrollPos) > 5) {
               exactScrollPos = track.scrollLeft;
             }
-
             exactScrollPos += speed;
-
-            // Seamless infinite wrap forward
             if (exactScrollPos >= maxScroll) {
               exactScrollPos -= maxScroll;
             }
@@ -143,20 +142,12 @@
         };
 
         track.addEventListener('mouseenter', () => isPaused = true);
-        track.addEventListener('mouseleave', () => {
-          isPaused = false;
-          exactScrollPos = track.scrollLeft; // Sync on resume
-        });
+        track.addEventListener('mouseleave', () => { isPaused = false; exactScrollPos = track.scrollLeft; });
         track.addEventListener('touchstart', () => isPaused = true, {passive: true});
-        track.addEventListener('touchend', () => {
-          isPaused = false;
-          exactScrollPos = track.scrollLeft; // Sync on resume
-        });
+        track.addEventListener('touchend', () => { isPaused = false; exactScrollPos = track.scrollLeft; });
 
-        // Handle bi-directional manual scrolling wrap
         track.addEventListener('scroll', () => {
           if (!maxScroll || !isPaused) return; 
-          // Enforce manual wrapping when user is actively scrolling
           if (track.scrollLeft >= maxScroll * 2) {
             track.scrollLeft -= maxScroll;
             exactScrollPos -= maxScroll;
@@ -167,6 +158,27 @@
         }, {passive: true});
         
         animate();
+      };
+
+      const checkImages = () => {
+        loadedCount++;
+        if (loadedCount === images.length) {
+          // Add a tiny delay to ensure browser has finished painting the layout
+          setTimeout(initGallery, 100);
+        }
+      };
+
+      if (images.length === 0) {
+        initGallery();
+      } else {
+        images.forEach(img => {
+          if (img.complete) {
+            checkImages();
+          } else {
+            img.addEventListener('load', checkImages);
+            img.addEventListener('error', checkImages); // Don't block forever if an image 404s
+          }
+        });
       }
     });
   </script>
