@@ -42,16 +42,28 @@
     <section class="gallery-section">
       <h3>Sangeet Memories</h3>
       <div class="track-wrapper">
-        <ul class="track">
-          <li class="track__item"><img src="images/sangeet.jpg" alt="Sangeet photo 1"></li>
-          <li class="track__item"><img src="images/sangeet.jpg" alt="Sangeet photo 2"></li>
-          <li class="track__item"><img src="images/sangeet.jpg" alt="Sangeet photo 3"></li>
-          <li class="track__item"><img src="images/sangeet.jpg" alt="Sangeet photo 4"></li>
-          <li class="track__item"><img src="images/sangeet.jpg" alt="Sangeet photo 5"></li>
-          <li class="track__item"><img src="images/sangeet.jpg" alt="Sangeet photo 6"></li>
-          <li class="track__item"><img src="images/sangeet.jpg" alt="Sangeet photo 7"></li>
-          <li class="track__item"><img src="images/sangeet.jpg" alt="Sangeet photo 8"></li>
-        </ul>
+        <div class="track">
+          <ul class="marquee-group">
+            <li class="track__item"><img src="images/sangeet.jpg" alt="Sangeet photo 1"></li>
+            <li class="track__item"><img src="images/sangeet.jpg" alt="Sangeet photo 2"></li>
+            <li class="track__item"><img src="images/sangeet.jpg" alt="Sangeet photo 3"></li>
+            <li class="track__item"><img src="images/sangeet.jpg" alt="Sangeet photo 4"></li>
+            <li class="track__item"><img src="images/sangeet.jpg" alt="Sangeet photo 5"></li>
+            <li class="track__item"><img src="images/sangeet.jpg" alt="Sangeet photo 6"></li>
+            <li class="track__item"><img src="images/sangeet.jpg" alt="Sangeet photo 7"></li>
+            <li class="track__item"><img src="images/sangeet.jpg" alt="Sangeet photo 8"></li>
+          </ul>
+          <ul class="marquee-group" aria-hidden="true">
+            <li class="track__item"><img src="images/sangeet.jpg" alt="Sangeet photo 1"></li>
+            <li class="track__item"><img src="images/sangeet.jpg" alt="Sangeet photo 2"></li>
+            <li class="track__item"><img src="images/sangeet.jpg" alt="Sangeet photo 3"></li>
+            <li class="track__item"><img src="images/sangeet.jpg" alt="Sangeet photo 4"></li>
+            <li class="track__item"><img src="images/sangeet.jpg" alt="Sangeet photo 5"></li>
+            <li class="track__item"><img src="images/sangeet.jpg" alt="Sangeet photo 6"></li>
+            <li class="track__item"><img src="images/sangeet.jpg" alt="Sangeet photo 7"></li>
+            <li class="track__item"><img src="images/sangeet.jpg" alt="Sangeet photo 8"></li>
+          </ul>
+        </div>
       </div>
     </section>
 
@@ -95,92 +107,5 @@
   </footer>
   <script src="countdown.js"></script>
   <script src="mobile-menu.js"></script>
-  <script>
-    document.addEventListener('DOMContentLoaded', () => {
-      const track = document.querySelector('.track');
-      if (!track) return;
-
-      const originalItems = Array.from(track.children);
-      const images = Array.from(track.querySelectorAll('img'));
-      let loadedCount = 0;
-
-      const initGallery = () => {
-        // Safely duplicate items TWICE for a seamless infinite loop in both directions
-        originalItems.forEach(item => track.appendChild(item.cloneNode(true)));
-        originalItems.forEach(item => track.appendChild(item.cloneNode(true)));
-
-        let isPaused = false;
-        let exactScrollPos = 0;
-        const speed = 0.6; // Smoother flow speed
-        let maxScroll = 0;
-
-        // Calculate boundary safely
-        const calculateMaxScroll = () => {
-          const gap = parseFloat(window.getComputedStyle(track).gap) || 0;
-          // Fallback to track height if layout hasn't painted width yet (since aspect-ratio is 1)
-          const itemWidth = originalItems[0].offsetWidth || track.offsetHeight;
-          if (itemWidth > 0) {
-            maxScroll = (itemWidth + gap) * originalItems.length;
-          }
-        };
-
-        calculateMaxScroll();
-        window.addEventListener('resize', calculateMaxScroll);
-
-        const animate = () => {
-          if (!isPaused && maxScroll > 0) {
-            if (Math.abs(track.scrollLeft - exactScrollPos) > 5) {
-              exactScrollPos = track.scrollLeft;
-            }
-            exactScrollPos += speed;
-            if (exactScrollPos >= maxScroll) {
-              exactScrollPos -= maxScroll;
-            }
-            track.scrollLeft = exactScrollPos;
-          }
-          requestAnimationFrame(animate);
-        };
-
-        track.addEventListener('mouseenter', () => isPaused = true);
-        track.addEventListener('mouseleave', () => { isPaused = false; exactScrollPos = track.scrollLeft; });
-        track.addEventListener('touchstart', () => isPaused = true, {passive: true});
-        track.addEventListener('touchend', () => { isPaused = false; exactScrollPos = track.scrollLeft; });
-
-        track.addEventListener('scroll', () => {
-          if (!maxScroll || !isPaused) return; 
-          if (track.scrollLeft >= maxScroll * 2) {
-            track.scrollLeft -= maxScroll;
-            exactScrollPos -= maxScroll;
-          } else if (track.scrollLeft <= 0) {
-            track.scrollLeft += maxScroll;
-            exactScrollPos += maxScroll;
-          }
-        }, {passive: true});
-        
-        animate();
-      };
-
-      const checkImages = () => {
-        loadedCount++;
-        if (loadedCount === images.length) {
-          // Add a tiny delay to ensure browser has finished painting the layout
-          setTimeout(initGallery, 100);
-        }
-      };
-
-      if (images.length === 0) {
-        initGallery();
-      } else {
-        images.forEach(img => {
-          if (img.complete) {
-            checkImages();
-          } else {
-            img.addEventListener('load', checkImages);
-            img.addEventListener('error', checkImages); // Don't block forever if an image 404s
-          }
-        });
-      }
-    });
-  </script>
 </body>
 </html>
