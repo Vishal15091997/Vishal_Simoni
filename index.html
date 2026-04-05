@@ -43,6 +43,30 @@
         <a href="venue.html">Venue</a>
         <a href="gallery.html">Gallery</a>
       </div>
+      <button class="hamburger-menu" aria-label="Toggle navigation menu">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+    </nav>
+    <div class="mobile-nav-overlay" id="mobileNavOverlay">
+      <nav class="nav-links">
+        <a href="index.html">Home</a>
+        <a href="couple.html">The Couple</a>
+        <div class="dropdown">
+          <a href="event.html">Our Story</a>
+          <div class="dropdown-content">
+            <a href="roka.html">Roka</a>
+            <a href="engagement.html">Engagement</a>
+            <a href="sangeet.html">Sangeet</a>
+            <a href="haldi.html">Haldi</a>
+            <a href="wedding.html">Wedding</a>
+            <a href="reception.html">Reception</a>
+          </div>
+        </div>
+        <a href="venue.html">Venue</a>
+        <a href="gallery.html">Gallery</a>
+      </nav>
     </nav>
   </header>
 
@@ -103,6 +127,7 @@
   </footer>
 
   <script src="countdown.js"></script>
+  <script src="mobile-menu.js"></script>
   <script>
     window.addEventListener('load', () => {
       setTimeout(() => {
