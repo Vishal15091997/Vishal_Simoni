@@ -99,52 +99,72 @@
     window.addEventListener('load', () => {
       const track = document.querySelector('.track');
       if (track) {
-        // Safely duplicate items for a seamless infinite loop
         const originalItems = Array.from(track.children);
-        originalItems.forEach(item => {
-          track.appendChild(item.cloneNode(true));
-        });
         
+        // Safely duplicate items TWICE for a seamless infinite loop in both directions
+        // This ensures ultra-wide monitors never see an empty edge
+        originalItems.forEach(item => track.appendChild(item.cloneNode(true)));
+        originalItems.forEach(item => track.appendChild(item.cloneNode(true)));
+
         let isPaused = false;
-        let scrollPos = 0;
-        const speed = 0.75; // Adjust this for slower/faster flow
+        let exactScrollPos = 0;
+        const speed = 0.6; // Smoother flow speed
         let maxScroll = 0;
 
-        // Function to perfectly calculate boundary regardless of loading time or window size
+        // Calculate boundary using exact CSS/Math instead of unpredictable DOM painting
         const calculateMaxScroll = () => {
-          const firstOriginal = track.children[0];
-          const firstClone = track.children[originalItems.length];
-          if (firstOriginal && firstClone) {
-            maxScroll = firstClone.offsetLeft - firstOriginal.offsetLeft;
+          const gap = parseFloat(window.getComputedStyle(track).gap) || 0;
+          const itemWidth = originalItems[0].offsetWidth;
+          if (itemWidth > 0) {
+            maxScroll = (itemWidth + gap) * originalItems.length;
           }
         };
 
         calculateMaxScroll();
+        setTimeout(calculateMaxScroll, 300); // Failsafe for late CSS parsing on slow connections
         window.addEventListener('resize', calculateMaxScroll);
-
-        // Crucial for Live servers: Recalculate as each delayed image finishes downloading
-        const images = track.querySelectorAll('img');
-        images.forEach(img => {
-          if (!img.complete) {
-            img.addEventListener('load', calculateMaxScroll);
-          }
-        });
 
         const animate = () => {
           if (!isPaused && maxScroll > 0) {
-            scrollPos += speed;
-            if (scrollPos >= maxScroll) {
-              scrollPos -= maxScroll;
+            // Sync JS exact position if user manually scrolled (difference > 5px)
+            if (Math.abs(track.scrollLeft - exactScrollPos) > 5) {
+              exactScrollPos = track.scrollLeft;
             }
-            track.scrollLeft = scrollPos;
+
+            exactScrollPos += speed;
+
+            // Seamless infinite wrap forward
+            if (exactScrollPos >= maxScroll) {
+              exactScrollPos -= maxScroll;
+            }
+            track.scrollLeft = exactScrollPos;
           }
           requestAnimationFrame(animate);
         };
 
         track.addEventListener('mouseenter', () => isPaused = true);
-        track.addEventListener('mouseleave', () => isPaused = false);
+        track.addEventListener('mouseleave', () => {
+          isPaused = false;
+          exactScrollPos = track.scrollLeft; // Sync on resume
+        });
         track.addEventListener('touchstart', () => isPaused = true, {passive: true});
-        track.addEventListener('touchend', () => isPaused = false);
+        track.addEventListener('touchend', () => {
+          isPaused = false;
+          exactScrollPos = track.scrollLeft; // Sync on resume
+        });
+
+        // Handle bi-directional manual scrolling wrap
+        track.addEventListener('scroll', () => {
+          if (!maxScroll || !isPaused) return; 
+          // Enforce manual wrapping when user is actively scrolling
+          if (track.scrollLeft >= maxScroll * 2) {
+            track.scrollLeft -= maxScroll;
+            exactScrollPos -= maxScroll;
+          } else if (track.scrollLeft <= 0) {
+            track.scrollLeft += maxScroll;
+            exactScrollPos += maxScroll;
+          }
+        }, {passive: true});
         
         animate();
       }
