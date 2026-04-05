@@ -428,6 +428,7 @@ body.mobile-menu-open .mobile-nav-overlay {
   align-items: center;
   gap: var(--size-4);
   min-width: 100%;
+  width: max-content; /* CRITICAL FIX: Forces container to fit all images before looping */
   animation: scrollMarquee 25s linear infinite;
   list-style-type: none;
 }
