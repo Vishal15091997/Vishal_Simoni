@@ -409,22 +409,38 @@ body.mobile-menu-open .mobile-nav-overlay {
   height: var(--size);
   width: 100%;
   display: flex;
-  overflow-x: auto;
+  overflow: hidden;
   gap: var(--size-4);
-  list-style-type: none;
   margin: 0;
-  padding: var(--size-4) 1rem;
+  padding: var(--size-4) 0;
   -webkit-mask: radial-gradient(#0000 0 30%, #000 30.5%) 50% calc(var(--size) * 0.5) / 300% 100%,
                 linear-gradient(0deg, black, black) 50% 0 / 100% var(--size-4) no-repeat,
                 linear-gradient(0deg, black, black) 50% 100% / 100% var(--size-4) no-repeat;
   mask: radial-gradient(#0000 0 30%, #000 30.5%) 50% calc(var(--size) * 0.5) / 300% 100%,
                 linear-gradient(0deg, black, black) 50% 0 / 100% var(--size-4) no-repeat,
                 linear-gradient(0deg, black, black) 50% 100% / 100% var(--size-4) no-repeat;
-  cursor: grab;
-  user-select: none;
 }
 
-.track::-webkit-scrollbar { display: none; }
+/* Hardware Accelerated Marquee */
+.marquee-group {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  gap: var(--size-4);
+  min-width: 100%;
+  animation: scrollMarquee 25s linear infinite;
+  list-style-type: none;
+}
+
+.track:hover .marquee-group,
+.track:active .marquee-group {
+  animation-play-state: paused;
+}
+
+@keyframes scrollMarquee {
+  from { transform: translateX(0); }
+  to { transform: translateX(calc(-100% - var(--size-4))); }
+}
 
 .track__item {
   height: 100%;
