@@ -96,90 +96,50 @@
   <script src="countdown.js"></script>
   <script src="mobile-menu.js"></script>
   <script>
-    document.addEventListener('DOMContentLoaded', () => {
+    window.addEventListener('load', () => {
       const track = document.querySelector('.track');
       if (!track) return;
 
-      const originalItems = Array.from(track.children);
-      const images = Array.from(track.querySelectorAll('img'));
-      let loadedCount = 0;
+      const items = Array.from(track.children);
+      items.forEach(item => track.appendChild(item.cloneNode(true)));
 
-      const initGallery = () => {
-        // Safely duplicate items TWICE for a seamless infinite loop in both directions
-        originalItems.forEach(item => track.appendChild(item.cloneNode(true)));
-        originalItems.forEach(item => track.appendChild(item.cloneNode(true)));
+      let scrollPos = 0;
+      let isPaused = false;
+      const speed = 0.6;
 
-        let isPaused = false;
-        let exactScrollPos = 0;
-        const speed = 0.6; // Smoother flow speed
-        let maxScroll = 0;
+      let itemWidth = items[0].offsetWidth;
+      let gap = parseFloat(window.getComputedStyle(track).gap) || 0;
+      let loopWidth = (itemWidth + gap) * items.length;
 
-        // Calculate boundary safely
-        const calculateMaxScroll = () => {
-          const gap = parseFloat(window.getComputedStyle(track).gap) || 0;
-          // Fallback to track height if layout hasn't painted width yet (since aspect-ratio is 1)
-          const itemWidth = originalItems[0].offsetWidth || track.offsetHeight;
-          if (itemWidth > 0) {
-            maxScroll = (itemWidth + gap) * originalItems.length;
-          }
-        };
+      window.addEventListener('resize', () => {
+        itemWidth = items[0].offsetWidth;
+        gap = parseFloat(window.getComputedStyle(track).gap) || 0;
+        loopWidth = (itemWidth + gap) * items.length;
+      });
 
-        calculateMaxScroll();
-        window.addEventListener('resize', calculateMaxScroll);
-
-        const animate = () => {
-          if (!isPaused && maxScroll > 0) {
-            if (Math.abs(track.scrollLeft - exactScrollPos) > 5) {
-              exactScrollPos = track.scrollLeft;
-            }
-            exactScrollPos += speed;
-            if (exactScrollPos >= maxScroll) {
-              exactScrollPos -= maxScroll;
-            }
-            track.scrollLeft = exactScrollPos;
-          }
-          requestAnimationFrame(animate);
-        };
-
-        track.addEventListener('mouseenter', () => isPaused = true);
-        track.addEventListener('mouseleave', () => { isPaused = false; exactScrollPos = track.scrollLeft; });
-        track.addEventListener('touchstart', () => isPaused = true, {passive: true});
-        track.addEventListener('touchend', () => { isPaused = false; exactScrollPos = track.scrollLeft; });
-
-        track.addEventListener('scroll', () => {
-          if (!maxScroll || !isPaused) return; 
-          if (track.scrollLeft >= maxScroll * 2) {
-            track.scrollLeft -= maxScroll;
-            exactScrollPos -= maxScroll;
-          } else if (track.scrollLeft <= 0) {
-            track.scrollLeft += maxScroll;
-            exactScrollPos += maxScroll;
-          }
-        }, {passive: true});
-        
-        animate();
-      };
-
-      const checkImages = () => {
-        loadedCount++;
-        if (loadedCount === images.length) {
-          // Add a tiny delay to ensure browser has finished painting the layout
-          setTimeout(initGallery, 100);
+      const animate = () => {
+        if (!isPaused && loopWidth > 0) {
+          scrollPos += speed;
+          if (scrollPos >= loopWidth) scrollPos -= loopWidth;
+          track.scrollLeft = scrollPos;
         }
+        requestAnimationFrame(animate);
       };
 
-      if (images.length === 0) {
-        initGallery();
-      } else {
-        images.forEach(img => {
-          if (img.complete) {
-            checkImages();
-          } else {
-            img.addEventListener('load', checkImages);
-            img.addEventListener('error', checkImages); // Don't block forever if an image 404s
-          }
-        });
-      }
+      track.addEventListener('mouseenter', () => isPaused = true);
+      track.addEventListener('mouseleave', () => { isPaused = false; scrollPos = track.scrollLeft; });
+      track.addEventListener('touchstart', () => isPaused = true, {passive: true});
+      track.addEventListener('touchend', () => { isPaused = false; scrollPos = track.scrollLeft; });
+
+      track.addEventListener('scroll', () => {
+        if (isPaused) {
+          if (track.scrollLeft >= loopWidth * 1.5) track.scrollLeft -= loopWidth;
+          else if (track.scrollLeft <= 0) track.scrollLeft += loopWidth;
+          scrollPos = track.scrollLeft;
+        }
+      }, {passive: true});
+
+      animate();
     });
   </script>
 </body>
