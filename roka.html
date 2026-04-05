@@ -42,16 +42,28 @@
     <section class="gallery-section">
       <h3>Roka Memories</h3>
       <div class="track-wrapper">
-        <ul class="track">
-          <li class="track__item"><img src="images/roka/photo1.jpg" alt="Roka photo 1"></li>
-          <li class="track__item"><img src="images/roka/photo2.jpg" alt="Roka photo 2"></li>
-          <li class="track__item"><img src="images/roka/photo3.jpg" alt="Roka photo 3"></li>
-          <li class="track__item"><img src="images/roka/photo4.jpg" alt="Roka photo 4"></li>
-          <li class="track__item"><img src="images/roka/photo5.jpg" alt="Roka photo 5"></li>
-          <li class="track__item"><img src="images/roka/photo6.jpg" alt="Roka photo 6"></li>
-          <li class="track__item"><img src="images/roka/photo7.jpg" alt="Roka photo 7"></li>
-          <li class="track__item"><img src="images/roka/photo8.jpg" alt="Roka photo 8"></li>
-        </ul>
+        <div class="track">
+          <ul class="marquee-group">
+            <li class="track__item"><img src="images/roka/photo1.jpg" alt="Roka photo 1"></li>
+            <li class="track__item"><img src="images/roka/photo2.jpg" alt="Roka photo 2"></li>
+            <li class="track__item"><img src="images/roka/photo3.jpg" alt="Roka photo 3"></li>
+            <li class="track__item"><img src="images/roka/photo4.jpg" alt="Roka photo 4"></li>
+            <li class="track__item"><img src="images/roka/photo5.jpg" alt="Roka photo 5"></li>
+            <li class="track__item"><img src="images/roka/photo6.jpg" alt="Roka photo 6"></li>
+            <li class="track__item"><img src="images/roka/photo7.jpg" alt="Roka photo 7"></li>
+            <li class="track__item"><img src="images/roka/photo8.jpg" alt="Roka photo 8"></li>
+          </ul>
+          <ul class="marquee-group" aria-hidden="true">
+            <li class="track__item"><img src="images/roka/photo1.jpg" alt="Roka photo 1"></li>
+            <li class="track__item"><img src="images/roka/photo2.jpg" alt="Roka photo 2"></li>
+            <li class="track__item"><img src="images/roka/photo3.jpg" alt="Roka photo 3"></li>
+            <li class="track__item"><img src="images/roka/photo4.jpg" alt="Roka photo 4"></li>
+            <li class="track__item"><img src="images/roka/photo5.jpg" alt="Roka photo 5"></li>
+            <li class="track__item"><img src="images/roka/photo6.jpg" alt="Roka photo 6"></li>
+            <li class="track__item"><img src="images/roka/photo7.jpg" alt="Roka photo 7"></li>
+            <li class="track__item"><img src="images/roka/photo8.jpg" alt="Roka photo 8"></li>
+          </ul>
+        </div>
       </div>
     </section>
 
@@ -95,52 +107,5 @@
   </footer>
   <script src="countdown.js"></script>
   <script src="mobile-menu.js"></script>
-  <script>
-    window.addEventListener('load', () => {
-      const track = document.querySelector('.track');
-      if (!track) return;
-
-      const items = Array.from(track.children);
-      items.forEach(item => track.appendChild(item.cloneNode(true)));
-
-      let scrollPos = 0;
-      let isPaused = false;
-      const speed = 0.6;
-
-      let itemWidth = items[0].offsetWidth;
-      let gap = parseFloat(window.getComputedStyle(track).gap) || 0;
-      let loopWidth = (itemWidth + gap) * items.length;
-
-      window.addEventListener('resize', () => {
-        itemWidth = items[0].offsetWidth;
-        gap = parseFloat(window.getComputedStyle(track).gap) || 0;
-        loopWidth = (itemWidth + gap) * items.length;
-      });
-
-      const animate = () => {
-        if (!isPaused && loopWidth > 0) {
-          scrollPos += speed;
-          if (scrollPos >= loopWidth) scrollPos -= loopWidth;
-          track.scrollLeft = scrollPos;
-        }
-        requestAnimationFrame(animate);
-      };
-
-      track.addEventListener('mouseenter', () => isPaused = true);
-      track.addEventListener('mouseleave', () => { isPaused = false; scrollPos = track.scrollLeft; });
-      track.addEventListener('touchstart', () => isPaused = true, {passive: true});
-      track.addEventListener('touchend', () => { isPaused = false; scrollPos = track.scrollLeft; });
-
-      track.addEventListener('scroll', () => {
-        if (isPaused) {
-          if (track.scrollLeft >= loopWidth * 1.5) track.scrollLeft -= loopWidth;
-          else if (track.scrollLeft <= 0) track.scrollLeft += loopWidth;
-          scrollPos = track.scrollLeft;
-        }
-      }, {passive: true});
-
-      animate();
-    });
-  </script>
 </body>
 </html>
