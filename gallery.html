@@ -51,6 +51,7 @@
       flex-shrink: 0;
       height: 100%;
       aspect-ratio: 1.1;
+      -webkit-box-reflect: below 10px linear-gradient(to bottom, rgba(0,0,0,0) 0%, rgba(0,0,0,0) 60%, rgba(0,0,0,0.4) 100%);
     }
 
     .photo-frame img {
@@ -60,35 +61,7 @@
       box-shadow: 0 8px 16px rgba(139, 0, 0, 0.3);
       border: 2px solid var(--gold);
       border-radius: 8px;
-    }
-
-    .reflection {
-      position: absolute;
-      bottom: calc(-100% - 10px);
-      left: 0;
-      width: 100%;
-      height: 100%;
-      transform: scaleY(-1);
-      opacity: 0.3;
-      filter: blur(1px);
-      border: 2px solid var(--gold);
-      border-radius: 8px;
-    }
-
-    .reflection img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-    }
-
-    .reflection-fade {
-      position: absolute;
-      bottom: calc(-100% - 10px);
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: linear-gradient(to bottom, transparent 0%, rgba(26, 0, 0, 0.95) 100%);
-      border-radius: 8px;
+      background-color: var(--ivory);
     }
 
     @media (max-width: 768px) {
@@ -171,10 +144,9 @@
       let loadedPhotos = 0;
 
       function loadNextPhoto() {
-        // Increased fail tolerance to 5 in case you skipped a few numbers
         if (failCount > 5) {
           if (loadedPhotos === 0) {
-            console.warn('Could not load Gallery/photo01 to 05. Check folder location and extensions. Loading placeholders...');
+            console.warn('Could not load Gallery/photo01 to 05. Loading placeholders...');
             loadFallbackImages(row);
           } else {
             finalizeWall(row);
@@ -183,13 +155,11 @@
         }
 
         const paddedNum = photoNum.toString().padStart(2, '0');
-        // Array of possible extensions to make loading bulletproof
         const extensions = ['.jpg', '.JPG', '.jpeg', '.JPEG', '.png', '.PNG'];
         let extIndex = 0;
 
         function tryNextExtension() {
           if (extIndex >= extensions.length) {
-            // If all extensions fail for this number, move to the next number
             failCount++;
             photoNum++;
             loadNextPhoto(); 
@@ -204,12 +174,12 @@
             loadedPhotos++;
             appendPhotoFrame(row, imagePath, paddedNum);
             photoNum++;
-            loadNextPhoto(); // Automatically fetch the next photo
+            loadNextPhoto(); 
           };
 
           img.onerror = () => {
             extIndex++;
-            tryNextExtension(); // Try the next extension (e.g., if .jpg fails, try .JPG)
+            tryNextExtension(); 
           };
 
           img.src = imagePath;
@@ -225,11 +195,7 @@
       const frame = document.createElement('div');
       frame.classList.add('photo-frame');
       frame.innerHTML = `
-        <img src="${imagePath}" alt="Gallery Photo ${altText}" loading="lazy" />
-        <div class="reflection">
-          <img src="${imagePath}" alt="Gallery Photo ${altText}" loading="lazy" />
-        </div>
-        <div class="reflection-fade"></div>
+        <img src="${imagePath}" alt="Gallery Photo ${altText}" loading="lazy" decoding="async" />
       `;
       row.appendChild(frame);
     }
@@ -260,8 +226,9 @@
       
       const baseWidth = (itemWidth + gap) * row.children.length;
       
-      const minRequiredWidth = window.innerWidth * 2.5;
-      const duplicatesNeeded = Math.ceil(minRequiredWidth / baseWidth) + 1;
+      // Optimized for memory: Only duplicate what is strictly necessary to fill the screen
+      const minRequiredWidth = window.innerWidth * 2;
+      const duplicatesNeeded = Math.ceil(minRequiredWidth / baseWidth);
 
       const children = Array.from(row.children);
       for (let i = 0; i < duplicatesNeeded; i++) {
