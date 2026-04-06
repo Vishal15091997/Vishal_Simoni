@@ -67,14 +67,14 @@
       <h3>Roka Memories</h3>
       <div class="track-wrapper">
         <ul class="track">
-          <li class="track__item"><img src="images/roka/photo1.jpg" alt="Roka photo 1"></li>
-          <li class="track__item"><img src="images/roka/photo2.jpg" alt="Roka photo 2"></li>
-          <li class="track__item"><img src="images/roka/photo3.jpg" alt="Roka photo 3"></li>
-          <li class="track__item"><img src="images/roka/photo4.jpg" alt="Roka photo 4"></li>
-          <li class="track__item"><img src="images/roka/photo5.jpg" alt="Roka photo 5"></li>
-          <li class="track__item"><img src="images/roka/photo6.jpg" alt="Roka photo 6"></li>
-          <li class="track__item"><img src="images/roka/photo7.jpg" alt="Roka photo 7"></li>
-          <li class="track__item"><img src="images/roka/photo8.jpg" alt="Roka photo 8"></li>
+          <li class="track__item"><img src="images/roka/photo1.jpg" alt="Roka photo 1" loading="lazy" decoding="async"></li>
+          <li class="track__item"><img src="images/roka/photo2.jpg" alt="Roka photo 2" loading="lazy" decoding="async"></li>
+          <li class="track__item"><img src="images/roka/photo3.jpg" alt="Roka photo 3" loading="lazy" decoding="async"></li>
+          <li class="track__item"><img src="images/roka/photo4.jpg" alt="Roka photo 4" loading="lazy" decoding="async"></li>
+          <li class="track__item"><img src="images/roka/photo5.jpg" alt="Roka photo 5" loading="lazy" decoding="async"></li>
+          <li class="track__item"><img src="images/roka/photo6.jpg" alt="Roka photo 6" loading="lazy" decoding="async"></li>
+          <li class="track__item"><img src="images/roka/photo7.jpg" alt="Roka photo 7" loading="lazy" decoding="async"></li>
+          <li class="track__item"><img src="images/roka/photo8.jpg" alt="Roka photo 8" loading="lazy" decoding="async"></li>
         </ul>
       </div>
     </section>
@@ -120,7 +120,7 @@
   <script src="countdown.js"></script>
   <script src="mobile-menu.js"></script>
   <script>
-    window.addEventListener('load', () => {
+    document.addEventListener('DOMContentLoaded', () => {
       const track = document.querySelector('.track');
       if (!track) return;
 
@@ -133,15 +133,16 @@
       let isPaused = false;
       const speed = 0.6;
 
-      let itemWidth = items[0].offsetWidth;
-      let gap = parseFloat(window.getComputedStyle(track).gap) || 0;
-      let loopWidth = (itemWidth + gap) * items.length;
+      let loopWidth = 0;
 
-      window.addEventListener('resize', () => {
-        itemWidth = items[0].offsetWidth;
-        gap = parseFloat(window.getComputedStyle(track).gap) || 0;
+      const calculateWidth = () => {
+        const itemWidth = items[0].getBoundingClientRect().width || items[0].offsetWidth;
+        const gap = parseFloat(window.getComputedStyle(track).gap) || 0;
         loopWidth = (itemWidth + gap) * items.length;
-      });
+      };
+
+      calculateWidth();
+      window.addEventListener('resize', calculateWidth);
 
       const animate = () => {
         if (!isPaused && loopWidth > 0) {
