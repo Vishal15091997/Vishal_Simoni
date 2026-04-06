@@ -412,6 +412,7 @@ body.mobile-menu-open .mobile-nav-overlay {
   width: 100%;
   display: flex;
   overflow-x: auto;
+  scroll-behavior: auto !important; /* CRITICAL: Prevents CSS from fighting JS animation */
   gap: var(--size-4);
   list-style-type: none;
   margin: 0;
@@ -442,6 +443,8 @@ body.mobile-menu-open .mobile-nav-overlay {
   object-fit: cover;
   border-radius: 12px;
   border: 2px solid var(--gold);
+  display: block;
+  box-sizing: border-box;
 }
 
 .video-wrap {position:relative;padding-top:56.25%;border-radius:16px;overflow:hidden;border:3px solid var(--gold);box-shadow:0 12px 32px rgba(212,175,55,0.4), inset 0 0 0 1px rgba(139,0,0,0.3); margin: 2rem 0;}
