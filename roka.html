@@ -75,7 +75,6 @@
           <li class="track__item"><img src="images/roka/photo6.jpg" alt="Roka photo 6"></li>
           <li class="track__item"><img src="images/roka/photo7.jpg" alt="Roka photo 7"></li>
           <li class="track__item"><img src="images/roka/photo8.jpg" alt="Roka photo 8"></li>
-          <!-- Images dynamically loaded via JavaScript to ensure stable loading on live servers -->
         </ul>
       </div>
     </section>
@@ -125,62 +124,29 @@
       const track = document.querySelector('.track');
       if (!track) return;
 
-      const imagePaths = [
-        'images/roka/photo1.jpg',
-        'images/roka/photo2.jpg',
-        'images/roka/photo3.jpg',
-        'images/roka/photo4.jpg',
-        'images/roka/photo5.jpg',
-        'images/roka/photo6.jpg',
-        'images/roka/photo7.jpg',
-        'images/roka/photo8.jpg'
-      ];
+      const items = Array.from(track.children);
+      const originalLength = items.length;
+      if (originalLength === 0) return;
 
-      track.innerHTML = '';
+      // Safely duplicate items TWICE for a seamless infinite loop
+      items.forEach(item => track.appendChild(item.cloneNode(true)));
+      items.forEach(item => track.appendChild(item.cloneNode(true)));
 
-      // Eagerly fetch images in JS memory (just like gallery.html)
-      const promises = imagePaths.map(path => {
-        return new Promise(resolve => {
-          const img = new Image();
-          img.onload = () => resolve({ valid: true, path });
-          img.onerror = () => resolve({ valid: false });
-          img.src = path;
-        });
-      });
+      let scrollPos = 0;
+      let isPaused = false;
+      const speed = 0.6;
+      let loopWidth = 0;
 
-      Promise.all(promises).then(results => {
-        const validPhotos = results.filter(r => r.valid);
-        
-        // 1. Build the actual HTML elements only AFTER files are successfully downloaded
-        validPhotos.forEach(photo => {
-          const li = document.createElement('li');
-          li.classList.add('track__item');
-          li.innerHTML = `<img src="${photo.path}" alt="Roka photo" loading="lazy" decoding="async">`;
-          track.appendChild(li);
-        });
+      const calculateWidth = () => {
+        // Because the container has aspect-ratio: 1, its width is exactly equal to its height.
+        // This mathematically guarantees the exact loop width instantly, WITHOUT waiting for images to load.
+        const itemWidth = items[0].offsetHeight;
+        const gap = parseFloat(window.getComputedStyle(track).gap) || 0;
+        loopWidth = (itemWidth + gap) * originalLength;
+      };
 
-        const items = Array.from(track.children);
-        if (items.length === 0) return;
-
-        // 2. Safely duplicate items TWICE for a seamless infinite loop
-        items.forEach(item => track.appendChild(item.cloneNode(true)));
-        items.forEach(item => track.appendChild(item.cloneNode(true)));
-
-        let scrollPos = 0;
-        let isPaused = false;
-        const speed = 0.6;
-        let loopWidth = 0;
-
-        const calculateWidth = () => {
-          const itemWidth = items[0].getBoundingClientRect().width || items[0].offsetWidth;
-          const gap = parseFloat(window.getComputedStyle(track).gap) || 0;
-          loopWidth = (itemWidth + gap) * items.length;
-        };
-
-        // 3. Give the DOM a tiny moment to paint the injected elements before animating
-        setTimeout(() => {
-          calculateWidth();
-          window.addEventListener('resize', calculateWidth);
+      calculateWidth();
+      window.addEventListener('resize', calculateWidth);
 
           const animate = () => {
             if (!isPaused && loopWidth > 0) {
@@ -205,8 +171,6 @@
           }, {passive: true});
 
           animate();
-        }, 150);
-      });
     });
   </script>
 </body>
