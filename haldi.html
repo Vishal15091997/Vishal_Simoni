@@ -27,7 +27,12 @@
             <a href="reception.html">Reception</a>
           </div>
         </div>
-        <a href="venue.html">Venue</a>
+        <div class="dropdown">
+          <a href="venue.html">Venue</a>
+          <div class="dropdown-content">
+            <a href="mangalgarh-history.html">Palace History</a>
+          </div>
+        </div>
         <a href="gallery.html">Gallery</a>
       </div>
       <button class="hamburger-menu" aria-label="Toggle navigation menu">
@@ -67,14 +72,6 @@
       <h3>Haldi Moments</h3>
       <div class="track-wrapper">
         <ul class="track">
-          <li class="track__item"><img src="images/haldi.jpg" alt="Haldi photo 1"></li>
-          <li class="track__item"><img src="images/haldi.jpg" alt="Haldi photo 2"></li>
-          <li class="track__item"><img src="images/haldi.jpg" alt="Haldi photo 3"></li>
-          <li class="track__item"><img src="images/haldi.jpg" alt="Haldi photo 4"></li>
-          <li class="track__item"><img src="images/haldi.jpg" alt="Haldi photo 5"></li>
-          <li class="track__item"><img src="images/haldi.jpg" alt="Haldi photo 6"></li>
-          <li class="track__item"><img src="images/haldi.jpg" alt="Haldi photo 7"></li>
-          <li class="track__item"><img src="images/haldi.jpg" alt="Haldi photo 8"></li>
         </ul>
       </div>
     </section>
@@ -120,52 +117,164 @@
   <script src="countdown.js"></script>
   <script src="mobile-menu.js"></script>
   <script>
-    window.addEventListener('load', () => {
+    document.addEventListener('DOMContentLoaded', () => {
       const track = document.querySelector('.track');
       if (!track) return;
 
-      const items = Array.from(track.children);
-      // Safely duplicate items TWICE for a seamless infinite loop in both directions
-      items.forEach(item => track.appendChild(item.cloneNode(true)));
-      items.forEach(item => track.appendChild(item.cloneNode(true)));
+      let photoNum = 1;
+      let failCount = 0;
+      let loadedPhotos = 0;
 
-      let scrollPos = 0;
-      let isPaused = false;
-      const speed = 0.6;
-
-      let itemWidth = items[0].offsetWidth;
-      let gap = parseFloat(window.getComputedStyle(track).gap) || 0;
-      let loopWidth = (itemWidth + gap) * items.length;
-
-      window.addEventListener('resize', () => {
-        itemWidth = items[0].offsetWidth;
-        gap = parseFloat(window.getComputedStyle(track).gap) || 0;
-        loopWidth = (itemWidth + gap) * items.length;
-      });
-
-      const animate = () => {
-        if (!isPaused && loopWidth > 0) {
-          scrollPos += speed;
-          if (scrollPos >= loopWidth) scrollPos -= loopWidth;
-          track.scrollLeft = scrollPos;
+      function loadNextPhoto() {
+        if (failCount > 5) {
+          if (loadedPhotos === 0) {
+            loadFallbackImages();
+          } else {
+            finalizeGallery();
+          }
+          return;
         }
-        requestAnimationFrame(animate);
-      };
 
-      track.addEventListener('mouseenter', () => isPaused = true);
-      track.addEventListener('mouseleave', () => { isPaused = false; scrollPos = track.scrollLeft; });
-      track.addEventListener('touchstart', () => isPaused = true, {passive: true});
-      track.addEventListener('touchend', () => { isPaused = false; scrollPos = track.scrollLeft; });
+        const extensions = ['.jpg', '.JPG', '.jpeg', '.JPEG', '.png', '.PNG'];
+        let extIndex = 0;
 
-      track.addEventListener('scroll', () => {
-        if (isPaused) {
-          if (track.scrollLeft >= loopWidth * 1.5) track.scrollLeft -= loopWidth;
-          else if (track.scrollLeft <= 0) track.scrollLeft += loopWidth;
-          scrollPos = track.scrollLeft;
+        function tryNextExtension() {
+          if (extIndex >= extensions.length) {
+            failCount++;
+            photoNum++;
+            loadNextPhoto();
+            return;
+          }
+
+          const imagePath = `images/haldi/photo${photoNum}${extensions[extIndex]}`;
+          const img = new Image();
+
+          img.onload = () => {
+            failCount = 0;
+            loadedPhotos++;
+            
+            const li = document.createElement('li');
+            li.classList.add('track__item');
+            li.innerHTML = `<img src="${imagePath}" alt="Haldi photo ${photoNum}">`;
+            track.appendChild(li);
+            
+            photoNum++;
+            loadNextPhoto();
+          };
+
+          img.onerror = () => {
+            extIndex++;
+            tryNextExtension();
+          };
+
+          img.src = imagePath;
         }
-      }, {passive: true});
 
-      animate();
+        tryNextExtension();
+      }
+
+      function loadFallbackImages() {
+        const fallbackImages = [
+          'images/haldi/haldi.jpg', 'images/haldi/haldi.jpg',
+          'images/haldi/haldi.jpg', 'images/haldi/haldi.jpg',
+          'images/haldi/haldi.jpg', 'images/haldi/haldi.jpg'
+        ];
+        fallbackImages.forEach((path, i) => {
+          const li = document.createElement('li');
+          li.classList.add('track__item');
+          li.innerHTML = `<img src="${path}" alt="Fallback photo ${i + 1}">`;
+          track.appendChild(li);
+        });
+        finalizeGallery();
+      }
+
+      function finalizeGallery() {
+        const items = Array.from(track.children);
+        const originalLength = items.length;
+        if (originalLength === 0) return;
+
+        // Duplicate items for the infinite loop
+        items.forEach(item => track.appendChild(item.cloneNode(true)));
+        items.forEach(item => track.appendChild(item.cloneNode(true)));
+
+        let scrollPos = 0;
+        let isPaused = false;
+        const speed = 0.6;
+        let loopWidth = 0;
+
+        const calculateWidth = () => {
+          const itemWidth = items[0].offsetHeight;
+          const gap = parseFloat(window.getComputedStyle(track).gap) || 0;
+          loopWidth = (itemWidth + gap) * originalLength;
+        };
+
+        calculateWidth();
+        window.addEventListener('resize', calculateWidth);
+
+        const animate = () => {
+          if (!isPaused && loopWidth > 0) {
+            scrollPos += speed;
+            if (scrollPos >= loopWidth) scrollPos -= loopWidth;
+            track.scrollLeft = scrollPos;
+          }
+          requestAnimationFrame(animate);
+        };
+
+        track.addEventListener('mouseenter', () => isPaused = true);
+        track.addEventListener('mouseleave', () => { isPaused = false; scrollPos = track.scrollLeft; });
+        track.addEventListener('touchstart', () => isPaused = true, {passive: true});
+        track.addEventListener('touchend', () => { isPaused = false; scrollPos = track.scrollLeft; });
+
+        track.addEventListener('scroll', () => {
+          if (isPaused) {
+            if (track.scrollLeft >= loopWidth * 1.5) track.scrollLeft -= loopWidth;
+            else if (track.scrollLeft <= 0) track.scrollLeft += loopWidth;
+            scrollPos = track.scrollLeft;
+          }
+        }, {passive: true});
+
+        animate();
+      }
+
+      loadNextPhoto();
+    });
+  </script>
+
+  <!-- Lightbox Overlay -->
+  <div class="lightbox-overlay" id="lightboxOverlay">
+    <div class="lightbox-content">
+      <button class="lightbox-close" id="lightboxClose">&times;</button>
+      <img src="" alt="Fullscreen Image" class="lightbox-img" id="lightboxImg">
+    </div>
+  </div>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const lightboxOverlay = document.getElementById('lightboxOverlay');
+      const lightboxImg = document.getElementById('lightboxImg');
+      const lightboxClose = document.getElementById('lightboxClose');
+
+      if (lightboxOverlay && lightboxImg) {
+        document.body.addEventListener('click', (e) => {
+          const fauxCard = e.target.closest('.faux-3d-card');
+          const trackItem = e.target.closest('.track__item');
+          const photoFrame = e.target.closest('.photo-frame');
+          
+          if (e.target.tagName === 'IMG') {
+            if (trackItem || photoFrame) {
+              lightboxImg.src = e.target.src;
+              lightboxOverlay.classList.add('active');
+            } else if (fauxCard && fauxCard.classList.contains('active')) {
+              lightboxImg.src = e.target.src;
+              lightboxOverlay.classList.add('active');
+            }
+          }
+        });
+
+        lightboxClose.addEventListener('click', () => lightboxOverlay.classList.remove('active'));
+        lightboxOverlay.addEventListener('click', (e) => {
+          if (e.target === lightboxOverlay) lightboxOverlay.classList.remove('active');
+        });
+      }
     });
   </script>
 </body>
