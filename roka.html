@@ -27,7 +27,12 @@
             <a href="reception.html">Reception</a>
           </div>
         </div>
-        <a href="venue.html">Venue</a>
+        <div class="dropdown">
+          <a href="venue.html">Venue</a>
+          <div class="dropdown-content">
+            <a href="mangalgarh-history.html">Palace History</a>
+          </div>
+        </div>
         <a href="gallery.html">Gallery</a>
       </div>
       <button class="hamburger-menu" aria-label="Toggle navigation menu">
@@ -123,7 +128,11 @@
       // Exact replica of the working dynamic loading sequence from gallery.html
       function loadNextPhoto() {
         if (failCount > 5) {
-          finalizeGallery();
+          if (loadedPhotos === 0) {
+            loadFallbackImages();
+          } else {
+            finalizeGallery();
+          }
           return;
         }
 
@@ -163,6 +172,21 @@
         }
 
         tryNextExtension();
+      }
+
+      function loadFallbackImages() {
+        const fallbackImages = [
+          'images/roka/photo1.jpg', 'images/roka/photo2.jpg',
+          'images/roka/photo3.jpg', 'images/roka/photo4.jpg',
+          'images/roka/photo5.jpg', 'images/roka/photo6.jpg'
+        ];
+        fallbackImages.forEach((path, i) => {
+          const li = document.createElement('li');
+          li.classList.add('track__item');
+          li.innerHTML = `<img src="${path}" alt="Fallback photo ${i + 1}">`;
+          track.appendChild(li);
+        });
+        finalizeGallery();
       }
 
       function finalizeGallery() {
@@ -214,6 +238,44 @@
       }
 
       loadNextPhoto();
+    });
+  </script>
+
+  <!-- Lightbox Overlay -->
+  <div class="lightbox-overlay" id="lightboxOverlay">
+    <div class="lightbox-content">
+      <button class="lightbox-close" id="lightboxClose">&times;</button>
+      <img src="" alt="Fullscreen Image" class="lightbox-img" id="lightboxImg">
+    </div>
+  </div>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const lightboxOverlay = document.getElementById('lightboxOverlay');
+      const lightboxImg = document.getElementById('lightboxImg');
+      const lightboxClose = document.getElementById('lightboxClose');
+
+      if (lightboxOverlay && lightboxImg) {
+        document.body.addEventListener('click', (e) => {
+          const fauxCard = e.target.closest('.faux-3d-card');
+          const trackItem = e.target.closest('.track__item');
+          const photoFrame = e.target.closest('.photo-frame');
+          
+          if (e.target.tagName === 'IMG') {
+            if (trackItem || photoFrame) {
+              lightboxImg.src = e.target.src;
+              lightboxOverlay.classList.add('active');
+            } else if (fauxCard && fauxCard.classList.contains('active')) {
+              lightboxImg.src = e.target.src;
+              lightboxOverlay.classList.add('active');
+            }
+          }
+        });
+
+        lightboxClose.addEventListener('click', () => lightboxOverlay.classList.remove('active'));
+        lightboxOverlay.addEventListener('click', (e) => {
+          if (e.target === lightboxOverlay) lightboxOverlay.classList.remove('active');
+        });
+      }
     });
   </script>
 </body>
