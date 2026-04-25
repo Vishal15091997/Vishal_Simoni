@@ -1120,7 +1120,7 @@ body.mobile-menu-open .mobile-nav-overlay {
 }
 
 /* Lightbox Styles */
-.track__item img, .faux-3d-card.active img, .photo-frame img {
+.track__item img, .faux-3d-card.active img, .photo-frame img, .story-frame img, .kid-frame img {
     cursor: zoom-in;
 }
 .lightbox-overlay {
