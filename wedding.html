@@ -27,7 +27,12 @@
             <a href="reception.html">Reception</a>
           </div>
         </div>
-        <a href="venue.html">Venue</a>
+        <div class="dropdown">
+          <a href="venue.html">Venue</a>
+          <div class="dropdown-content">
+            <a href="mangalgarh-history.html">Palace History</a>
+          </div>
+        </div>
         <a href="gallery.html">Gallery</a>
       </div>
       <button class="hamburger-menu" aria-label="Toggle navigation menu">
@@ -67,14 +72,6 @@
       <h3 style="text-align: center; margin: 0; color: var(--maroon);">Wedding Day Photos</h3>
       <div class="faux-3d-slider" id="faux3dSlider">
         <div class="faux-3d-track">
-          <div class="faux-3d-card"><img src="images/wedding.jpg" alt="Wedding photo 1"></div>
-          <div class="faux-3d-card"><img src="images/wedding.jpg" alt="Wedding photo 2"></div>
-          <div class="faux-3d-card"><img src="images/wedding.jpg" alt="Wedding photo 3"></div>
-          <div class="faux-3d-card"><img src="images/wedding.jpg" alt="Wedding photo 4"></div>
-          <div class="faux-3d-card"><img src="images/wedding.jpg" alt="Wedding photo 5"></div>
-          <div class="faux-3d-card"><img src="images/wedding.jpg" alt="Wedding photo 6"></div>
-          <div class="faux-3d-card"><img src="images/wedding.jpg" alt="Wedding photo 7"></div>
-          <div class="faux-3d-card"><img src="images/wedding.jpg" alt="Wedding photo 8"></div>
         </div>
       </div>
     </section>
@@ -120,55 +117,166 @@
   <script src="countdown.js"></script>
   <script src="mobile-menu.js"></script>
   <script>
-    const cards = Array.from(document.querySelectorAll('.faux-3d-card'));
-    let currentIndex = 0;
+    document.addEventListener('DOMContentLoaded', () => {
+      const track = document.querySelector('.faux-3d-track');
+      if (!track) return;
 
-    const layoutCards = () => {
-      const total = cards.length;
-      const center = Math.floor(total / 2);
+      let photoNum = 1;
+      let failCount = 0;
+      let loadedPhotos = 0;
 
-      cards.forEach((card, i) => {
-        const distance = ((i - currentIndex + total) % total);
-        let offset = distance;
-        if (distance > center) offset = distance - total;
+      function loadNextPhoto() {
+        if (failCount > 5) {
+          if (loadedPhotos === 0) {
+            loadFallbackImages();
+          } else {
+            finalizeGallery();
+          }
+          return;
+        }
 
-        const absOffset = Math.abs(offset);
-        const x = offset * 170;
-        const z = -absOffset * 150;
-        const rotateY = offset * 14;
-        const scale = Math.max(0.55, 1 - absOffset * 0.12);
+        const extensions = ['.jpg', '.JPG', '.jpeg', '.JPEG', '.png', '.PNG'];
+        let extIndex = 0;
 
-        card.style.transform = `translate3d(${x}px, -50%, ${z}px) rotateY(${rotateY}deg) scale(${scale})`;
-        card.style.transformOrigin = 'center center';
-        card.classList.toggle('active', absOffset === 0);
-        card.classList.toggle('near', absOffset === 1);
-        card.style.opacity = absOffset > 3 ? 0 : 1 - absOffset * 0.16;
-        card.style.zIndex = `${100 - absOffset}`;
-      });
-    };
+        function tryNextExtension() {
+          if (extIndex >= extensions.length) {
+            failCount++;
+            photoNum++;
+            loadNextPhoto();
+            return;
+          }
 
-    const nextCard = () => {
-      currentIndex = (currentIndex + 1) % cards.length;
-      layoutCards();
-    };
+          const imagePath = `images/wedding/photo${photoNum}${extensions[extIndex]}`;
+          const img = new Image();
 
-    const prevCard = () => {
-      currentIndex = (currentIndex - 1 + cards.length) % cards.length;
-      layoutCards();
-    };
+          img.onload = () => {
+            failCount = 0;
+            loadedPhotos++;
+            
+            const div = document.createElement('div');
+            div.classList.add('faux-3d-card');
+            div.innerHTML = `<img src="${imagePath}" alt="Wedding photo ${photoNum}">`;
+            track.appendChild(div);
+            
+            photoNum++;
+            loadNextPhoto();
+          };
 
-    // initial layout
-    layoutCards();
+          img.onerror = () => {
+            extIndex++;
+            tryNextExtension();
+          };
 
-    // Auto-cycle every 7 seconds
-    setInterval(nextCard, 7000);
+          img.src = imagePath;
+        }
 
-    // optional click on card to jump to it
-    cards.forEach((card, i) => {
-      card.addEventListener('click', () => {
-        currentIndex = i;
+        tryNextExtension();
+      }
+
+      function loadFallbackImages() {
+        const fallbackImages = [
+          'images/wedding/wedding.jpg', 'images/wedding/wedding.jpg',
+          'images/wedding/wedding.jpg', 'images/wedding/wedding.jpg',
+          'images/wedding/wedding.jpg', 'images/wedding/wedding.jpg'
+        ];
+        fallbackImages.forEach((path, i) => {
+          const div = document.createElement('div');
+          div.classList.add('faux-3d-card');
+          div.innerHTML = `<img src="${path}" alt="Fallback photo ${i + 1}">`;
+          track.appendChild(div);
+        });
+        finalizeGallery();
+      }
+
+      function finalizeGallery() {
+        const cards = Array.from(document.querySelectorAll('.faux-3d-card'));
+        if (cards.length === 0) return;
+        
+        let currentIndex = 0;
+
+        const layoutCards = () => {
+          const total = cards.length;
+          const center = Math.floor(total / 2);
+
+          cards.forEach((card, i) => {
+            const distance = ((i - currentIndex + total) % total);
+            let offset = distance;
+            if (distance > center) offset = distance - total;
+
+            const absOffset = Math.abs(offset);
+            const x = offset * 170;
+            const z = -absOffset * 150;
+            const rotateY = offset * 14;
+            const scale = Math.max(0.55, 1 - absOffset * 0.12);
+
+            card.style.transform = `translate3d(${x}px, -50%, ${z}px) rotateY(${rotateY}deg) scale(${scale})`;
+            card.style.transformOrigin = 'center center';
+            card.classList.toggle('active', absOffset === 0);
+            card.classList.toggle('near', absOffset === 1);
+            card.style.opacity = absOffset > 3 ? 0 : 1 - absOffset * 0.16;
+            card.style.zIndex = `${100 - absOffset}`;
+          });
+        };
+
+        const nextCard = () => {
+          currentIndex = (currentIndex + 1) % cards.length;
+          layoutCards();
+        };
+
+        // initial layout
         layoutCards();
-      });
+
+        // Auto-cycle every 7 seconds
+        setInterval(nextCard, 7000);
+
+        // optional click on card to jump to it
+        cards.forEach((card, i) => {
+          card.addEventListener('click', () => {
+            currentIndex = i;
+            layoutCards();
+          });
+        });
+      }
+
+      loadNextPhoto();
+    });
+  </script>
+
+  <!-- Lightbox Overlay -->
+  <div class="lightbox-overlay" id="lightboxOverlay">
+    <div class="lightbox-content">
+      <button class="lightbox-close" id="lightboxClose">&times;</button>
+      <img src="" alt="Fullscreen Image" class="lightbox-img" id="lightboxImg">
+    </div>
+  </div>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const lightboxOverlay = document.getElementById('lightboxOverlay');
+      const lightboxImg = document.getElementById('lightboxImg');
+      const lightboxClose = document.getElementById('lightboxClose');
+
+      if (lightboxOverlay && lightboxImg) {
+        document.body.addEventListener('click', (e) => {
+          const fauxCard = e.target.closest('.faux-3d-card');
+          const trackItem = e.target.closest('.track__item');
+          const photoFrame = e.target.closest('.photo-frame');
+          
+          if (e.target.tagName === 'IMG') {
+            if (trackItem || photoFrame) {
+              lightboxImg.src = e.target.src;
+              lightboxOverlay.classList.add('active');
+            } else if (fauxCard && fauxCard.classList.contains('active')) {
+              lightboxImg.src = e.target.src;
+              lightboxOverlay.classList.add('active');
+            }
+          }
+        });
+
+        lightboxClose.addEventListener('click', () => lightboxOverlay.classList.remove('active'));
+        lightboxOverlay.addEventListener('click', (e) => {
+          if (e.target === lightboxOverlay) lightboxOverlay.classList.remove('active');
+        });
+      }
     });
   </script>
 </body>
