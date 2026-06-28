@@ -6,10 +6,8 @@
   <title>Our Wedding - Roka</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700;800&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,400&family=Montserrat:wght@300;400;500&family=Cinzel+Decorative:wght@400;700&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="style.css" />
-  <!-- Swiper CSS -->
-  <link rel="stylesheet" href="https://unpkg.com/swiper/swiper-bundle.min.css" />
 </head>
 <body>
   <header class="topbar">
@@ -17,117 +15,76 @@
       <a class="brand" href="index.html">V &amp; S</a>
       <div class="nav-links">
         <a href="index.html">Home</a>
-        <a href="event.html">Events</a>
-        <a href="venue.html">Venue</a>
+        <a href="couple.html">The Couple</a>
+        <div class="dropdown">
+          <a href="event.html">Our Story</a>
+          <div class="dropdown-content">
+            <a href="roka.html">Roka</a>
+            <a href="engagement.html">Engagement</a>
+            <a href="sangeet.html">Sangeet</a>
+            <a href="haldi.html">Haldi</a>
+            <a href="wedding.html">Wedding</a>
+            <a href="reception.html">Reception</a>
+          </div>
+        </div>
+        <div class="dropdown">
+          <a href="venue.html">Venue</a>
+          <div class="dropdown-content">
+            <a href="khajuraho-history.html">Khajuraho History</a>
+          </div>
+        </div>
+        <a href="gallery.html">Gallery</a>
       </div>
+      <button class="hamburger-menu" aria-label="Toggle navigation menu">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
     </nav>
+    <div class="mobile-nav-overlay" id="mobileNavOverlay">
+      <nav class="nav-links">
+        <a href="index.html">Home</a>
+        <a href="couple.html">The Couple</a>
+        <div class="dropdown">
+          <a href="event.html">Our Story</a>
+          <div class="dropdown-content">
+            <a href="roka.html">Roka</a>
+            <a href="engagement.html">Engagement</a>
+            <a href="sangeet.html">Sangeet</a>
+            <a href="haldi.html">Haldi</a>
+            <a href="wedding.html">Wedding</a>
+            <a href="reception.html">Reception</a>
+          </div>
+        </div>
+        <div class="dropdown">
+          <a href="venue.html">Venue</a>
+          <div class="dropdown-content">
+            <a href="khajuraho-history.html">Khajuraho History</a>
+          </div>
+        </div>
+        <a href="gallery.html">Gallery</a>
+      </nav>
+    </div>
   </header>
 
   <main class="container">
     <section class="section-block">
       <h2>Roka Ceremony</h2>
-      <p>The Roka marked the official commitment between our families. It was a intimate gathering where we celebrated the union with traditional rituals and delicious food.</p>
+      <p>The Roka is marking the beautiful coming together of two families, an intimate beginning where traditions are being honored, smiles are being exchanged, and hearts are quietly aligning. What starts as a simple gathering is gently turning into a celebration of togetherness, filled with warmth, meaningful rituals, and the joy of sharing good food and even better company.</p>
     </section>
 
     <section class="gallery-section">
       <h3>Roka Memories</h3>
-      <div class="main-slider loading">
-        <div class="swiper-wrapper">
-          <div class="swiper-slide">
-            <div class="slide-bgimg" style="background-image: url('images/photo1.jpg');"></div>
-            <div class="content">
-              <div class="title">Our Journey Begins</div>
-              <div class="caption">The first moments of our beautiful story together.</div>
-            </div>
-          </div>
-          <div class="swiper-slide">
-            <div class="slide-bgimg" style="background-image: url('images/photo2.jpg');"></div>
-            <div class="content">
-              <div class="title">Family & Friends</div>
-              <div class="caption">Surrounded by the love of those who mean the most to us.</div>
-            </div>
-          </div>
-          <div class="swiper-slide">
-            <div class="slide-bgimg" style="background-image: url('images/photo3.jpg');"></div>
-            <div class="content">
-              <div class="title">Precious Moments</div>
-              <div class="caption">Capturing the joy and laughter of our special day.</div>
-            </div>
-          </div>
-          <div class="swiper-slide">
-            <div class="slide-bgimg" style="background-image: url('images/photo4.jpg');"></div>
-            <div class="content">
-              <div class="title">Love & Laughter</div>
-              <div class="caption">The happiness that fills our hearts every day.</div>
-            </div>
-          </div>
-          <div class="swiper-slide">
-            <div class="slide-bgimg" style="background-image: url('images/photo5.jpg');"></div>
-            <div class="content">
-              <div class="title">Forever Together</div>
-              <div class="caption">Building memories that will last a lifetime.</div>
-            </div>
-          </div>
-          <div class="swiper-slide">
-            <div class="slide-bgimg" style="background-image: url('images/photo6.jpg');"></div>
-            <div class="content">
-              <div class="title">Beautiful Celebrations</div>
-              <div class="caption">The traditions and customs that bring us together.</div>
-            </div>
-          </div>
-          <div class="swiper-slide">
-            <div class="slide-bgimg" style="background-image: url('images/photo7.jpg');"></div>
-            <div class="content">
-              <div class="title">Cherished Memories</div>
-              <div class="caption">Moments we'll treasure in our hearts forever.</div>
-            </div>
-          </div>
-          <div class="swiper-slide">
-            <div class="slide-bgimg" style="background-image: url('images/photo8.jpg');"></div>
-            <div class="content">
-              <div class="title">Our Future Awaits</div>
-              <div class="caption">Excited for all the adventures that lie ahead.</div>
-            </div>
-          </div>
-        </div>
-        <div class="swiper-button-prev"></div>
-        <div class="swiper-button-next"></div>
-      </div>
-
-      <div class="nav-slider loading">
-        <div class="swiper-wrapper">
-          <div class="swiper-slide">
-            <img src="images/photo1.jpg" alt="Photo 1" />
-          </div>
-          <div class="swiper-slide">
-            <img src="images/photo2.jpg" alt="Photo 2" />
-          </div>
-          <div class="swiper-slide">
-            <img src="images/photo3.jpg" alt="Photo 3" />
-          </div>
-          <div class="swiper-slide">
-            <img src="images/photo4.jpg" alt="Photo 4" />
-          </div>
-          <div class="swiper-slide">
-            <img src="images/photo5.jpg" alt="Photo 5" />
-          </div>
-          <div class="swiper-slide">
-            <img src="images/photo6.jpg" alt="Photo 6" />
-          </div>
-          <div class="swiper-slide">
-            <img src="images/photo7.jpg" alt="Photo 7" />
-          </div>
-          <div class="swiper-slide">
-            <img src="images/photo8.jpg" alt="Photo 8" />
-          </div>
-        </div>
+      <div class="track-wrapper">
+        <ul class="track">
+        </ul>
       </div>
     </section>
 
     <section class="section-block video-block">
       <h3>Roka Highlights</h3>
       <div class="video-wrap">
-        <iframe width="560" height="315" src="https://www.youtube-nocookie.com/embed/ScMzIvxBSi4" title="YouTube video player" frameborder="0" allow="accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+        <iframe width="560" height="315" src="https://www.youtube-nocookie.com/embed/ni1eXO2JcdA?si=1brqk_1K3wdtL7qf" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
       </div>
     </section>
 
@@ -145,26 +102,186 @@
   </main>
 
   <footer class="site-footer">
-    <p>Thank you for being part of our journey.</p>
-    <p style="margin-top: 0.8rem; font-style: italic; color: var(--gold);">Two hearts. Two families. One beautiful beginning.</p>
+    <div class="container footer-compact-row">
+      <div class="countdown" aria-live="polite">
+        <div><span id="days">0</span><small>Days</small></div>
+        <div><span id="hours">0</span><small>Hours</small></div>
+        <div><span id="minutes">0</span><small>Minutes</small></div>
+        <div><span id="seconds">0</span><small>Seconds</small></div>
+      </div>
+      <p class="footer-quote-inline">Two hearts. Two families. One beautiful beginning.</p>
+      <div class="wedding-seal">
+        <div class="seal-inner">
+          <span class="seal-month">NOV</span>
+          <span class="seal-day">20</span>
+          <span class="seal-year">2026</span>
+        </div>
+      </div>
+    </div>
   </footer>
-
-  <!-- Swiper JS -->
-  <script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
-  <script src="parallax.js"></script>
+  <script src="countdown.js"></script>
+  <script src="mobile-menu.js"></script>
   <script>
-    // Ensure continuous looping on roka page slider
-    if (window.mainSlider) {
-      mainSlider.params.loop = true;
-      mainSlider.params.autoplay.delay = 7000;
-      mainSlider.params.autoplay.disableOnInteraction = false;
-      mainSlider.loopCreate && mainSlider.loopCreate();
-      mainSlider.update();
+    document.addEventListener('DOMContentLoaded', () => {
+      const track = document.querySelector('.track');
+      if (!track) return;
 
-      mainSlider.on('reachEnd', function () {
-        setTimeout(() => mainSlider.slideToLoop(0, 0), 10);
-      });
-    }
+      let photoNum = 1;
+      let failCount = 0;
+      let loadedPhotos = 0;
+
+      // Exact replica of the working dynamic loading sequence from gallery.html
+      function loadNextPhoto() {
+        if (failCount > 5) {
+          if (loadedPhotos === 0) {
+            loadFallbackImages();
+          } else {
+            finalizeGallery();
+          }
+          return;
+        }
+
+        const extensions = ['.jpg', '.JPG', '.jpeg', '.JPEG', '.png', '.PNG'];
+        let extIndex = 0;
+
+        function tryNextExtension() {
+          if (extIndex >= extensions.length) {
+            failCount++;
+            photoNum++;
+            loadNextPhoto();
+            return;
+          }
+
+          const imagePath = `images/roka/photo${photoNum}${extensions[extIndex]}`;
+          const img = new Image();
+
+          img.onload = () => {
+            failCount = 0;
+            loadedPhotos++;
+            
+            const li = document.createElement('li');
+            li.classList.add('track__item');
+            li.innerHTML = `<img src="${imagePath}" alt="Roka photo ${photoNum}">`;
+            track.appendChild(li);
+            
+            photoNum++;
+            loadNextPhoto();
+          };
+
+          img.onerror = () => {
+            extIndex++;
+            tryNextExtension();
+          };
+
+          img.src = imagePath;
+        }
+
+        tryNextExtension();
+      }
+
+      function loadFallbackImages() {
+        const fallbackImages = [
+          'images/roka/photo1.jpg', 'images/roka/photo2.jpg',
+          'images/roka/photo3.jpg', 'images/roka/photo4.jpg',
+          'images/roka/photo5.jpg', 'images/roka/photo6.jpg'
+        ];
+        fallbackImages.forEach((path, i) => {
+          const li = document.createElement('li');
+          li.classList.add('track__item');
+          li.innerHTML = `<img src="${path}" alt="Fallback photo ${i + 1}">`;
+          track.appendChild(li);
+        });
+        finalizeGallery();
+      }
+
+      function finalizeGallery() {
+        const items = Array.from(track.children);
+        const originalLength = items.length;
+        if (originalLength === 0) return;
+
+        // Duplicate items for the infinite loop
+        items.forEach(item => track.appendChild(item.cloneNode(true)));
+        items.forEach(item => track.appendChild(item.cloneNode(true)));
+
+        let scrollPos = 0;
+        let isPaused = false;
+        const speed = 0.6;
+        let loopWidth = 0;
+
+        const calculateWidth = () => {
+          const itemWidth = items[0].offsetHeight;
+          const gap = parseFloat(window.getComputedStyle(track).gap) || 0;
+          loopWidth = (itemWidth + gap) * originalLength;
+        };
+
+        calculateWidth();
+        window.addEventListener('resize', calculateWidth);
+
+        const animate = () => {
+          if (!isPaused && loopWidth > 0) {
+            scrollPos += speed;
+            if (scrollPos >= loopWidth) scrollPos -= loopWidth;
+            track.scrollLeft = scrollPos;
+          }
+          requestAnimationFrame(animate);
+        };
+
+        track.addEventListener('mouseenter', () => isPaused = true);
+        track.addEventListener('mouseleave', () => { isPaused = false; scrollPos = track.scrollLeft; });
+        track.addEventListener('touchstart', () => isPaused = true, {passive: true});
+        track.addEventListener('touchend', () => { isPaused = false; scrollPos = track.scrollLeft; });
+
+        track.addEventListener('scroll', () => {
+          if (isPaused) {
+            if (track.scrollLeft >= loopWidth * 1.5) track.scrollLeft -= loopWidth;
+            else if (track.scrollLeft <= 0) track.scrollLeft += loopWidth;
+            scrollPos = track.scrollLeft;
+          }
+        }, {passive: true});
+
+        animate();
+      }
+
+      loadNextPhoto();
+    });
+  </script>
+
+  <!-- Lightbox Overlay -->
+  <div class="lightbox-overlay" id="lightboxOverlay">
+    <div class="lightbox-content">
+      <button class="lightbox-close" id="lightboxClose">&times;</button>
+      <img src="" alt="Fullscreen Image" class="lightbox-img" id="lightboxImg">
+    </div>
+  </div>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const lightboxOverlay = document.getElementById('lightboxOverlay');
+      const lightboxImg = document.getElementById('lightboxImg');
+      const lightboxClose = document.getElementById('lightboxClose');
+
+      if (lightboxOverlay && lightboxImg) {
+        document.body.addEventListener('click', (e) => {
+          const fauxCard = e.target.closest('.faux-3d-card');
+          const trackItem = e.target.closest('.track__item');
+          const photoFrame = e.target.closest('.photo-frame');
+          
+          if (e.target.tagName === 'IMG') {
+            if (trackItem || photoFrame) {
+              lightboxImg.src = e.target.src;
+              lightboxOverlay.classList.add('active');
+            } else if (fauxCard && fauxCard.classList.contains('active')) {
+              lightboxImg.src = e.target.src;
+              lightboxOverlay.classList.add('active');
+            }
+          }
+        });
+
+        lightboxClose.addEventListener('click', () => lightboxOverlay.classList.remove('active'));
+        lightboxOverlay.addEventListener('click', (e) => {
+          if (e.target === lightboxOverlay) lightboxOverlay.classList.remove('active');
+        });
+      }
+    });
   </script>
 </body>
 </html>

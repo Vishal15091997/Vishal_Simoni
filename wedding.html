@@ -6,7 +6,7 @@
   <title>Our Wedding - Main Ceremony</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700;800&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,400&family=Montserrat:wght@300;400;500&family=Cinzel+Decorative:wght@400;700&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
@@ -15,35 +15,76 @@
       <a class="brand" href="index.html">V &amp; S</a>
       <div class="nav-links">
         <a href="index.html">Home</a>
-        <a href="event.html">Events</a>
-        <a href="venue.html">Venue</a>
+        <a href="couple.html">The Couple</a>
+        <div class="dropdown">
+          <a href="event.html">Our Story</a>
+          <div class="dropdown-content">
+            <a href="roka.html">Roka</a>
+            <a href="engagement.html">Engagement</a>
+            <a href="sangeet.html">Sangeet</a>
+            <a href="haldi.html">Haldi</a>
+            <a href="wedding.html">Wedding</a>
+            <a href="reception.html">Reception</a>
+          </div>
+        </div>
+        <div class="dropdown">
+          <a href="venue.html">Venue</a>
+          <div class="dropdown-content">
+            <a href="khajuraho-history.html">Khajuraho History</a>
+          </div>
+        </div>
+        <a href="gallery.html">Gallery</a>
       </div>
+      <button class="hamburger-menu" aria-label="Toggle navigation menu">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
     </nav>
+    <div class="mobile-nav-overlay" id="mobileNavOverlay">
+      <nav class="nav-links">
+        <a href="index.html">Home</a>
+        <a href="couple.html">The Couple</a>
+        <div class="dropdown">
+          <a href="event.html">Our Story</a>
+          <div class="dropdown-content">
+            <a href="roka.html">Roka</a>
+            <a href="engagement.html">Engagement</a>
+            <a href="sangeet.html">Sangeet</a>
+            <a href="haldi.html">Haldi</a>
+            <a href="wedding.html">Wedding</a>
+            <a href="reception.html">Reception</a>
+          </div>
+        </div>
+        <div class="dropdown">
+          <a href="venue.html">Venue</a>
+          <div class="dropdown-content">
+            <a href="khajuraho-history.html">Khajuraho History</a>
+          </div>
+        </div>
+        <a href="gallery.html">Gallery</a>
+      </nav>
+    </div>
   </header>
 
   <main class="container">
     <section class="section-block">
       <h2>Wedding Ceremony</h2>
-      <p>The main wedding ceremony was the pinnacle of our celebrations. Exchanging vows amidst flowers, music, and the blessings of our families, it was a day we'll cherish forever.</p>
+      <p>The wedding ceremony is coming together as a deeply meaningful celebration of tradition, values, and togetherness. Rooted in rituals passed down through generations, every moment carries a sense of purpose and belonging. Surrounded by the love and blessings of our families, it is not just the union of two individuals, but the coming together of two families, two worlds, and countless shared traditions. In the warmth of these sacred customs, we are beginning a journey built on respect, unity, and the promise of walking forward as one.</p>
     </section>
 
     <section class="gallery-section">
-      <h3>Wedding Day Photos</h3>
-      <div class="carousel" id="carousel">
-        <button class="carousel-btn prev" data-dir="prev" aria-label="Previous image">‹</button>
-        <div class="carousel-track">
-          <img src="images/photo5.jpg" alt="Wedding photo 1" class="carousel-slide active" />
-          <img src="images/photo6.jpg" alt="Wedding photo 2" class="carousel-slide" />
-          <img src="images/photo7.jpg" alt="Wedding photo 3" class="carousel-slide" />
+      <h3 style="text-align: center; margin: 0; color: var(--maroon);">Wedding Day Photos</h3>
+      <div class="faux-3d-slider" id="faux3dSlider">
+        <div class="faux-3d-track">
         </div>
-        <button class="carousel-btn next" data-dir="next" aria-label="Next image">›</button>
       </div>
     </section>
 
     <section class="section-block video-block">
       <h3>Wedding Ceremony Video</h3>
       <div class="video-wrap">
-        <iframe width="560" height="315" src="https://www.youtube-nocookie.com/embed/ScMzIvxBSi4" title="YouTube video player" frameborder="0" allow="accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+        <iframe width="560" height="315" src="https://www.youtube.com/embed/Y9PUCn1KZcY?si=0puzNKudEr8uO2E4" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
       </div>
     </section>
 
@@ -61,32 +102,188 @@
   </main>
 
   <footer class="site-footer">
-    <p>Thank you for being part of our journey.</p>
-    <p style="margin-top: 0.8rem; font-style: italic; color: var(--gold);">Two hearts. Two families. One beautiful beginning.</p>
+    <div class="container footer-compact-row">
+      <div class="countdown" aria-live="polite">
+        <div><span id="days">0</span><small>Days</small></div>
+        <div><span id="hours">0</span><small>Hours</small></div>
+        <div><span id="minutes">0</span><small>Minutes</small></div>
+        <div><span id="seconds">0</span><small>Seconds</small></div>
+      </div>
+      <p class="footer-quote-inline">Two hearts. Two families. One beautiful beginning.</p>
+      <div class="wedding-seal">
+        <div class="seal-inner">
+          <span class="seal-month">NOV</span>
+          <span class="seal-day">20</span>
+          <span class="seal-year">2026</span>
+        </div>
+      </div>
+    </div>
   </footer>
-
+  <script src="countdown.js"></script>
+  <script src="mobile-menu.js"></script>
   <script>
-    const slides = Array.from(document.querySelectorAll('.carousel-slide'));
-    const prevBtn = document.querySelector('.carousel-btn.prev');
-    const nextBtn = document.querySelector('.carousel-btn.next');
-    let activeIndex = 0;
+    document.addEventListener('DOMContentLoaded', () => {
+      const track = document.querySelector('.faux-3d-track');
+      if (!track) return;
 
-    const updateCarousel = (index) => {
-      slides.forEach((slide, i) => {
-        slide.classList.toggle('active', i === index);
-      });
-    };
+      let photoNum = 1;
+      let failCount = 0;
+      let loadedPhotos = 0;
 
-    const changeSlide = (dir) => {
-      activeIndex = (activeIndex + dir + slides.length) % slides.length;
-      updateCarousel(activeIndex);
-    };
+      function loadNextPhoto() {
+        if (failCount > 5) {
+          if (loadedPhotos === 0) {
+            loadFallbackImages();
+          } else {
+            finalizeGallery();
+          }
+          return;
+        }
 
-    prevBtn.addEventListener('click', () => changeSlide(-1));
-    nextBtn.addEventListener('click', () => changeSlide(1));
+        const extensions = ['.jpg', '.JPG', '.jpeg', '.JPEG', '.png', '.PNG'];
+        let extIndex = 0;
 
-    // Auto-slide every 10 seconds
-    setInterval(() => changeSlide(1), 10000);
+        function tryNextExtension() {
+          if (extIndex >= extensions.length) {
+            failCount++;
+            photoNum++;
+            loadNextPhoto();
+            return;
+          }
+
+          const imagePath = `images/wedding/photo${photoNum}${extensions[extIndex]}`;
+          const img = new Image();
+
+          img.onload = () => {
+            failCount = 0;
+            loadedPhotos++;
+            
+            const div = document.createElement('div');
+            div.classList.add('faux-3d-card');
+            div.innerHTML = `<img src="${imagePath}" alt="Wedding photo ${photoNum}">`;
+            track.appendChild(div);
+            
+            photoNum++;
+            loadNextPhoto();
+          };
+
+          img.onerror = () => {
+            extIndex++;
+            tryNextExtension();
+          };
+
+          img.src = imagePath;
+        }
+
+        tryNextExtension();
+      }
+
+      function loadFallbackImages() {
+        const fallbackImages = [
+          'images/wedding/wedding.jpg', 'images/wedding/wedding.jpg',
+          'images/wedding/wedding.jpg', 'images/wedding/wedding.jpg',
+          'images/wedding/wedding.jpg', 'images/wedding/wedding.jpg',
+          'images/wedding/wedding.jpg', 'images/wedding/wedding.jpg'
+        ];
+        fallbackImages.forEach((path, i) => {
+          const div = document.createElement('div');
+          div.classList.add('faux-3d-card');
+          div.innerHTML = `<img src="${path}" alt="Fallback photo ${i + 1}">`;
+          track.appendChild(div);
+        });
+        finalizeGallery();
+      }
+
+      function finalizeGallery() {
+        const cards = Array.from(document.querySelectorAll('.faux-3d-card'));
+        if (cards.length === 0) return;
+        
+        let currentIndex = 0;
+
+        const layoutCards = () => {
+          const total = cards.length;
+          const center = Math.floor(total / 2);
+
+          cards.forEach((card, i) => {
+            const distance = ((i - currentIndex + total) % total);
+            let offset = distance;
+            if (distance > center) offset = distance - total;
+
+            const absOffset = Math.abs(offset);
+            const x = offset * 170;
+            const z = -absOffset * 150;
+            const rotateY = offset * 14;
+            const scale = Math.max(0.55, 1 - absOffset * 0.12);
+
+            card.style.transform = `translate3d(${x}px, -50%, ${z}px) rotateY(${rotateY}deg) scale(${scale})`;
+            card.style.transformOrigin = 'center center';
+            card.classList.toggle('active', absOffset === 0);
+            card.classList.toggle('near', absOffset === 1);
+            card.style.opacity = absOffset > 3 ? 0 : 1 - absOffset * 0.16;
+            card.style.zIndex = `${100 - absOffset}`;
+          });
+        };
+
+        const nextCard = () => {
+          currentIndex = (currentIndex + 1) % cards.length;
+          layoutCards();
+        };
+
+        // initial layout
+        layoutCards();
+
+        // Auto-cycle every 7 seconds
+        setInterval(nextCard, 7000);
+
+        // optional click on card to jump to it
+        cards.forEach((card, i) => {
+          card.addEventListener('click', () => {
+            currentIndex = i;
+            layoutCards();
+          });
+        });
+      }
+
+      loadNextPhoto();
+    });
+  </script>
+
+  <!-- Lightbox Overlay -->
+  <div class="lightbox-overlay" id="lightboxOverlay">
+    <div class="lightbox-content">
+      <button class="lightbox-close" id="lightboxClose">&times;</button>
+      <img src="" alt="Fullscreen Image" class="lightbox-img" id="lightboxImg">
+    </div>
+  </div>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const lightboxOverlay = document.getElementById('lightboxOverlay');
+      const lightboxImg = document.getElementById('lightboxImg');
+      const lightboxClose = document.getElementById('lightboxClose');
+
+      if (lightboxOverlay && lightboxImg) {
+        document.body.addEventListener('click', (e) => {
+          const fauxCard = e.target.closest('.faux-3d-card');
+          const trackItem = e.target.closest('.track__item');
+          const photoFrame = e.target.closest('.photo-frame');
+          
+          if (e.target.tagName === 'IMG') {
+            if (trackItem || photoFrame) {
+              lightboxImg.src = e.target.src;
+              lightboxOverlay.classList.add('active');
+            } else if (fauxCard && fauxCard.classList.contains('active')) {
+              lightboxImg.src = e.target.src;
+              lightboxOverlay.classList.add('active');
+            }
+          }
+        });
+
+        lightboxClose.addEventListener('click', () => lightboxOverlay.classList.remove('active'));
+        lightboxOverlay.addEventListener('click', (e) => {
+          if (e.target === lightboxOverlay) lightboxOverlay.classList.remove('active');
+        });
+      }
+    });
   </script>
 </body>
 </html>

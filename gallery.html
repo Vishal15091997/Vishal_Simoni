@@ -1,1 +1,366 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Our Wedding - Gallery</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,400&family=Montserrat:wght@300;400;500&family=Cinzel+Decorative:wght@400;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+  <style>
+    .gallery-container {
+      width: 100%;
+      flex: 1;
+      display: flex;
+      align-items: center;
+      perspective: 1000px;
+      overflow: hidden;
+      background: radial-gradient(circle at 50% 50%, #b30000 0%, #4a0000 70%, #1a0000 100%);
+      position: relative;
+      box-shadow: inset 0 0 150px rgba(0,0,0,0.8);
+    }
 
+    .gallery-container::before {
+      content: "";
+      position: absolute;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: linear-gradient(180deg, rgba(255, 255, 255, 0.12) 0%, transparent 50%);
+      pointer-events: none;
+      z-index: 2;
+    }
+
+    .wall-container {
+      position: relative;
+      transform-style: preserve-3d;
+      transform: rotateY(8deg);
+      width: fit-content;
+      min-width: 100%;
+      padding: 0 20px;
+    }
+
+    .photo-row {
+      position: relative;
+      display: flex;
+      height: 280px;
+      gap: 20px;
+    }
+
+    .photo-frame {
+      position: relative;
+      flex-shrink: 0;
+      height: 100%;
+      aspect-ratio: 1.1;
+      -webkit-box-reflect: below 10px linear-gradient(to bottom, rgba(0,0,0,0) 0%, rgba(0,0,0,0) 60%, rgba(0,0,0,0.4) 100%);
+    }
+
+    .photo-frame img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      box-shadow: 0 8px 16px rgba(139, 0, 0, 0.3);
+      border: 2px solid var(--gold);
+      border-radius: 8px;
+      background-color: var(--ivory);
+    }
+
+    @media (max-width: 768px) {
+      .photo-row {
+        height: 150px;
+        gap: 10px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header class="topbar">
+    <nav class="container nav-grid">
+      <a class="brand" href="index.html">V &amp; S</a>
+      <div class="nav-links">
+        <a href="index.html">Home</a>
+        <a href="couple.html">The Couple</a>
+        <div class="dropdown">
+          <a href="event.html">Our Story</a>
+          <div class="dropdown-content">
+            <a href="roka.html">Roka</a>
+            <a href="engagement.html">Engagement</a>
+            <a href="sangeet.html">Sangeet</a>
+            <a href="haldi.html">Haldi</a>
+            <a href="wedding.html">Wedding</a>
+            <a href="reception.html">Reception</a>
+          </div>
+        </div>
+        <div class="dropdown">
+          <a href="venue.html">Venue</a>
+          <div class="dropdown-content">
+            <a href="khajuraho-history.html">Khajuraho History</a>
+          </div>
+        </div>
+        <a href="gallery.html">Gallery</a>
+      </div>
+      <button class="hamburger-menu" aria-label="Toggle navigation menu">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+    </nav>
+    <div class="mobile-nav-overlay" id="mobileNavOverlay">
+      <nav class="nav-links">
+        <a href="index.html">Home</a>
+        <a href="couple.html">The Couple</a>
+        <div class="dropdown">
+          <a href="event.html">Our Story</a>
+          <div class="dropdown-content">
+            <a href="roka.html">Roka</a>
+            <a href="engagement.html">Engagement</a>
+            <a href="sangeet.html">Sangeet</a>
+            <a href="haldi.html">Haldi</a>
+            <a href="wedding.html">Wedding</a>
+            <a href="reception.html">Reception</a>
+          </div>
+        </div>
+        <div class="dropdown">
+          <a href="venue.html">Venue</a>
+          <div class="dropdown-content">
+            <a href="khajuraho-history.html">Khajuraho History</a>
+          </div>
+        </div>
+        <a href="gallery.html">Gallery</a>
+      </nav>
+    </div>
+  </header>
+
+  <main style="display: flex; flex-direction: column;">
+    <div class="gallery-container">
+      <div class="wall-container" id="main-wall"></div>
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container footer-compact-row">
+      <div class="countdown" aria-live="polite">
+        <div><span id="days">0</span><small>Days</small></div>
+        <div><span id="hours">0</span><small>Hours</small></div>
+        <div><span id="minutes">0</span><small>Minutes</small></div>
+        <div><span id="seconds">0</span><small>Seconds</small></div>
+      </div>
+      <p class="footer-quote-inline">Two hearts. Two families. One beautiful beginning.</p>
+      <div class="wedding-seal">
+        <div class="seal-inner">
+          <span class="seal-month">NOV</span>
+          <span class="seal-day">20</span>
+          <span class="seal-year">2026</span>
+        </div>
+      </div>
+    </div>
+  </footer>
+  <script src="countdown.js"></script>
+  <script src="mobile-menu.js"></script>
+  <script>
+    let scrollPosition = 0;
+    let isManualScrolling = false;
+    let scrollTimeout;
+    let rowShift = 0;
+    let initialScrollPosition = 0;
+    let hasScrolledPastStart = false;
+
+    function createPhotoWall() {
+      const wall = document.getElementById('main-wall');
+      wall.innerHTML = ''; // Clear existing content
+
+      const row = document.createElement('div');
+      row.classList.add('photo-row');
+      row.id = 'main-row';
+      wall.appendChild(row);
+
+      let photoNum = 1;
+      let failCount = 0;
+      let loadedPhotos = 0;
+
+      function loadNextPhoto() {
+        if (failCount > 5) {
+          if (loadedPhotos === 0) {
+            console.warn('Could not load Gallery/photo01 to 05. Loading placeholders...');
+            loadFallbackImages(row);
+          } else {
+            finalizeWall(row);
+          }
+          return;
+        }
+
+        const paddedNum = photoNum.toString().padStart(2, '0');
+        const extensions = ['.jpg', '.JPG', '.jpeg', '.JPEG', '.png', '.PNG'];
+        let extIndex = 0;
+
+        function tryNextExtension() {
+          if (extIndex >= extensions.length) {
+            failCount++;
+            photoNum++;
+            loadNextPhoto(); 
+            return;
+          }
+
+          const imagePath = `Gallery/photo${paddedNum}${extensions[extIndex]}`;
+          const img = new Image();
+
+          img.onload = () => {
+            failCount = 0;
+            loadedPhotos++;
+            appendPhotoFrame(row, imagePath, paddedNum);
+            photoNum++;
+            loadNextPhoto(); 
+          };
+
+          img.onerror = () => {
+            extIndex++;
+            tryNextExtension(); 
+          };
+
+          img.src = imagePath;
+        }
+
+        tryNextExtension();
+      }
+
+      loadNextPhoto();
+    }
+
+    function appendPhotoFrame(row, imagePath, altText) {
+      const frame = document.createElement('div');
+      frame.classList.add('photo-frame');
+      frame.innerHTML = `
+        <img src="${imagePath}" alt="Gallery Photo ${altText}" loading="lazy" decoding="async" />
+      `;
+      row.appendChild(frame);
+    }
+
+    function loadFallbackImages(row) {
+      const fallbackImages = [
+        'images/groom.jpg', 'images/bride.jpg',
+        'images/Vishal_Life_01.jpg', 'images/Simoni_Life_01.jpg',
+        'images/Little_Vishal.jpg', 'images/Little_Simoni.jpg'
+      ];
+      
+      fallbackImages.forEach((path, i) => {
+        const num = (i + 1).toString().padStart(2, '0');
+        appendPhotoFrame(row, path, num);
+      });
+      
+      finalizeWall(row);
+    }
+
+    function finalizeWall(row) {
+      if (row.children.length === 0) return;
+
+      // Mathematically calculate width to prevent browser painting delays from breaking the loop
+      const isMobile = window.innerWidth <= 768;
+      const itemHeight = isMobile ? 130 : 240;
+      const gap = isMobile ? 10 : 20;
+      const itemWidth = itemHeight * 1.1; // Using CSS aspect-ratio 1.1
+      
+      const baseWidth = (itemWidth + gap) * row.children.length;
+      
+      // Optimized for memory: Only duplicate what is strictly necessary to fill the screen
+      const minRequiredWidth = window.innerWidth * 2;
+      const duplicatesNeeded = Math.ceil(minRequiredWidth / baseWidth);
+
+      const children = Array.from(row.children);
+      for (let i = 0; i < duplicatesNeeded; i++) {
+        children.forEach(child => {
+          row.appendChild(child.cloneNode(true));
+        });
+      }
+
+      rowShift = baseWidth;
+      
+      // Center the first photo on load (accounting for the 20px container padding)
+      initialScrollPosition = (window.innerWidth / 2) - (itemWidth / 2) - 20;
+      scrollPosition = initialScrollPosition;
+      hasScrolledPastStart = false;
+      
+      updateWallPosition();
+      autoScrollWall();
+    }
+
+    function updateWallPosition() {
+      const row = document.getElementById('main-row');
+
+      if (rowShift) {
+        // Once the initial empty space scrolls out of view, enforce strict zero-boundary wrapping
+        if (scrollPosition <= 0) hasScrolledPastStart = true;
+
+        if (scrollPosition <= -rowShift) scrollPosition += rowShift;
+        
+        if (hasScrolledPastStart && scrollPosition > 0) {
+          scrollPosition -= rowShift;
+        } else if (!hasScrolledPastStart && scrollPosition > initialScrollPosition) {
+          scrollPosition -= rowShift;
+          hasScrolledPastStart = true;
+        }
+
+        if (row) row.style.transform = `translateX(${scrollPosition}px)`;
+      }
+    }
+
+    function autoScrollWall() {
+      if (!isManualScrolling) {
+        scrollPosition -= 0.6; // Adjust auto-scroll speed here
+        updateWallPosition();
+      }
+      requestAnimationFrame(autoScrollWall);
+    }
+
+    window.addEventListener('wheel', (event) => {
+      isManualScrolling = true;
+
+      scrollPosition -= event.deltaY * 0.8;
+      updateWallPosition();
+
+      clearTimeout(scrollTimeout);
+      scrollTimeout = setTimeout(() => {
+        isManualScrolling = false;
+      }, 150);
+    }, { passive: true });
+
+    createPhotoWall();
+  </script>
+
+  <!-- Lightbox Overlay -->
+  <div class="lightbox-overlay" id="lightboxOverlay">
+    <div class="lightbox-content">
+      <button class="lightbox-close" id="lightboxClose">&times;</button>
+      <img src="" alt="Fullscreen Image" class="lightbox-img" id="lightboxImg">
+    </div>
+  </div>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const lightboxOverlay = document.getElementById('lightboxOverlay');
+      const lightboxImg = document.getElementById('lightboxImg');
+      const lightboxClose = document.getElementById('lightboxClose');
+
+      if (lightboxOverlay && lightboxImg) {
+        document.body.addEventListener('click', (e) => {
+          const fauxCard = e.target.closest('.faux-3d-card');
+          const trackItem = e.target.closest('.track__item');
+          const photoFrame = e.target.closest('.photo-frame');
+          
+          if (e.target.tagName === 'IMG') {
+            if (trackItem || photoFrame) {
+              lightboxImg.src = e.target.src;
+              lightboxOverlay.classList.add('active');
+            } else if (fauxCard && fauxCard.classList.contains('active')) {
+              lightboxImg.src = e.target.src;
+              lightboxOverlay.classList.add('active');
+            }
+          }
+        });
+
+        lightboxClose.addEventListener('click', () => lightboxOverlay.classList.remove('active'));
+        lightboxOverlay.addEventListener('click', (e) => {
+          if (e.target === lightboxOverlay) lightboxOverlay.classList.remove('active');
+        });
+      }
+    });
+  </script>
+</body>
+</html>

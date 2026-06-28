@@ -6,7 +6,7 @@
   <title>Our Wedding - Events</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700;800&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,400&family=Montserrat:wght@300;400;500&family=Cinzel+Decorative:wght@400;700&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
@@ -15,10 +15,56 @@
       <a class="brand" href="index.html">V &amp; S</a>
       <div class="nav-links">
         <a href="index.html">Home</a>
-        <a href="event.html">Events</a>
-        <a href="venue.html">Venue</a>
+        <a href="couple.html">The Couple</a>
+        <div class="dropdown">
+          <a href="event.html">Our Story</a>
+          <div class="dropdown-content">
+            <a href="roka.html">Roka</a>
+            <a href="engagement.html">Engagement</a>
+            <a href="sangeet.html">Sangeet</a>
+            <a href="haldi.html">Haldi</a>
+            <a href="wedding.html">Wedding</a>
+            <a href="reception.html">Reception</a>
+          </div>
+        </div>
+        <div class="dropdown">
+          <a href="venue.html">Venue</a>
+          <div class="dropdown-content">
+            <a href="khajuraho-history.html">Khajuraho History</a>
+          </div>
+        </div>
+        <a href="gallery.html">Gallery</a>
       </div>
+      <button class="hamburger-menu" aria-label="Toggle navigation menu">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
     </nav>
+    <div class="mobile-nav-overlay" id="mobileNavOverlay">
+      <nav class="nav-links">
+        <a href="index.html">Home</a>
+        <a href="couple.html">The Couple</a>
+        <div class="dropdown">
+          <a href="event.html">Our Story</a>
+          <div class="dropdown-content">
+            <a href="roka.html">Roka</a>
+            <a href="engagement.html">Engagement</a>
+            <a href="sangeet.html">Sangeet</a>
+            <a href="haldi.html">Haldi</a>
+            <a href="wedding.html">Wedding</a>
+            <a href="reception.html">Reception</a>
+          </div>
+        </div>
+        <div class="dropdown">
+          <a href="venue.html">Venue</a>
+          <div class="dropdown-content">
+            <a href="khajuraho-history.html">Khajuraho History</a>
+          </div>
+        </div>
+        <a href="gallery.html">Gallery</a>
+      </nav>
+    </div>
   </header>
 
   <main class="container">
@@ -34,26 +80,32 @@
       <div class="events-details">
         <div class="event-detail-card">
           <h4>Roka</h4>
+          <span class="event-date">Mar 09, 2026</span>
           <p>An intimate family gathering where traditions are honored. We celebrate the official bond between our families with joy and elegance.</p>
         </div>
         <div class="event-detail-card">
           <h4>Engagement</h4>
+          <span class="event-date">Nov 19, 2026</span>
           <p>The beginning of our journey together. A beautiful ceremony where our families unite and we exchange tokens of our commitment.</p>
         </div>
         <div class="event-detail-card">
           <h4>Sangeet</h4>
+          <span class="event-date">Nov 19, 2026</span>
           <p>A night of music, dance, and celebration. Friends and family gather to perform traditional songs and dances that honor both families.</p>
         </div>
         <div class="event-detail-card">
           <h4>Haldi</h4>
+          <span class="event-date">Nov 20, 2026</span>
           <p>Vibrant colors, laughter, and blessings. This pre-wedding ritual is filled with joy as family and friends bless us with turmeric and flowers.</p>
         </div>
         <div class="event-detail-card">
           <h4>Wedding Ceremony</h4>
+          <span class="event-date">Nov 20, 2026</span>
           <p>The most important day of our lives! We exchange vows under the watchful eyes of loved ones and embark on our journey as husband and wife.</p>
         </div>
         <div class="event-detail-card">
           <h4>Reception</h4>
+          <span class="event-date">Nov 23, 2026</span>
           <p>An evening of celebration, elegant dining, and dancing. We celebrate with our extended family and friends in joy and gratitude.</p>
         </div>
       </div>
@@ -74,10 +126,23 @@
   </main>
 
   <footer class="site-footer">
-    <p>Thank you for being part of our journey.</p>
-    <p style="margin-top: 0.8rem; font-style: italic; color: var(--gold);">Two hearts. Two families. One beautiful beginning.</p>
+    <div class="container footer-compact-row">
+      <div class="countdown" aria-live="polite">
+        <div><span id="days">0</span><small>Days</small></div>
+        <div><span id="hours">0</span><small>Hours</small></div>
+        <div><span id="minutes">0</span><small>Minutes</small></div>
+        <div><span id="seconds">0</span><small>Seconds</small></div>
+      </div>
+      <p class="footer-quote-inline">Two hearts. Two families. One beautiful beginning.</p>
+      <div class="wedding-seal">
+        <div class="seal-inner">
+          <span class="seal-month">NOV</span>
+          <span class="seal-day">20</span>
+          <span class="seal-year">2026</span>
+        </div>
+      </div>
+    </div>
   </footer>
-
-
+  <script src="countdown.js"></script>
 </body>
 </html>
