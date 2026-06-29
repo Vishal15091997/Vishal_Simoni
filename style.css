@@ -193,7 +193,7 @@ a {color:inherit;text-decoration:none;}
 
 /* Mobile Nav Overlay */
 .mobile-nav-overlay {
-    display: none; /* Hidden by default */
+    display: flex; /* Always flex, visibility controlled by transform/visibility */
     position: fixed;
     top: 0;
     left: 0;
@@ -205,12 +205,13 @@ a {color:inherit;text-decoration:none;}
     flex-direction: column;
     justify-content: center;
     align-items: center;
+    visibility: hidden; /* Hide by default */
     transform: translateX(100%); /* Start off-screen */
     transition: transform 0.4s ease-out;
 }
 
 body.mobile-menu-open .mobile-nav-overlay {
-    display: flex;
+    visibility: visible; /* Show when menu is open */
     transform: translateX(0); /* Slide in */
 }
 
@@ -781,6 +782,23 @@ body.mobile-menu-open .mobile-nav-overlay {
   }
   
   .countdown, .wedding-seal { justify-self: center; justify-content: center; }
+
+  .cards-container {
+    flex-direction: column;
+    align-items: center;
+    gap: 2.5rem;
+  }
+  .card-divider {
+    width: 60%;
+    height: 3px;
+    margin: 0;
+    background: linear-gradient(90deg, transparent 0%, var(--gold) 20%, var(--gold) 80%, transparent 100%);
+  }
+}
+
+@media (max-width: 420px) {
+  .countdown { grid-template-columns: 1fr 1fr; }
+  .wedding-seal { justify-self: center; }
 }
 
 @media (max-width: 640px) {

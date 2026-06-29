@@ -332,35 +332,6 @@
       <img src="" alt="Fullscreen Image" class="lightbox-img" id="lightboxImg">
     </div>
   </div>
-  <script>
-    document.addEventListener('DOMContentLoaded', () => {
-      const lightboxOverlay = document.getElementById('lightboxOverlay');
-      const lightboxImg = document.getElementById('lightboxImg');
-      const lightboxClose = document.getElementById('lightboxClose');
-
-      if (lightboxOverlay && lightboxImg) {
-        document.body.addEventListener('click', (e) => {
-          const fauxCard = e.target.closest('.faux-3d-card');
-          const trackItem = e.target.closest('.track__item');
-          const photoFrame = e.target.closest('.photo-frame');
-          
-          if (e.target.tagName === 'IMG') {
-            if (trackItem || photoFrame) {
-              lightboxImg.src = e.target.src;
-              lightboxOverlay.classList.add('active');
-            } else if (fauxCard && fauxCard.classList.contains('active')) {
-              lightboxImg.src = e.target.src;
-              lightboxOverlay.classList.add('active');
-            }
-          }
-        });
-
-        lightboxClose.addEventListener('click', () => lightboxOverlay.classList.remove('active'));
-        lightboxOverlay.addEventListener('click', (e) => {
-          if (e.target === lightboxOverlay) lightboxOverlay.classList.remove('active');
-        });
-      }
-    });
-  </script>
+  <script src="lightbox.js"></script>
 </body>
 </html>
