@@ -164,19 +164,28 @@
     let rowShift = 0;
     let initialScrollPosition = 0;
     let hasScrolledPastStart = false;
+    let autoScrollStarted = false;
+    const initialVisibleImages = 10;
+    const manifestBatchDelay = 12;
+    const galleryManifestPath = 'Gallery/manifest.json';
+    let gallerySourceRow = null;
 
-    async function createPhotoWall() {
+    function createPhotoWall() {
       const wall = document.getElementById('main-wall');
       wall.innerHTML = ''; // Clear existing content
 
-      const row = document.createElement('div');
-      row.classList.add('photo-row');
-      row.id = 'main-row';
-      wall.appendChild(row);
+      gallerySourceRow = document.createElement('div');
+      gallerySourceRow.classList.add('photo-row');
+      gallerySourceRow.id = 'main-row';
+      gallerySourceRow.style.display = 'none';
 
+      loadGallerySources(gallerySourceRow);
+    }
+
+    async function loadGallerySources(row) {
       let imageFiles = [];
       try {
-        const response = await fetch('Gallery/manifest.json', { cache: 'no-store' });
+        const response = await fetch(galleryManifestPath, { cache: 'no-store' });
         if (response.ok) {
           imageFiles = await response.json();
         } else {
@@ -186,16 +195,59 @@
         console.warn('Gallery manifest fetch failed', error);
       }
 
-      if (!Array.isArray(imageFiles) || imageFiles.length === 0) {
+      if (Array.isArray(imageFiles) && imageFiles.length > 0) {
+        loadManifestImages(row, imageFiles);
+      } else {
         console.warn('Gallery manifest empty or missing; falling back to scan mode.');
         await scanGalleryImages(row);
-      } else {
-        imageFiles.forEach((filename, index) => {
-          const padded = String(index + 1).padStart(2, '0');
-          appendPhotoFrame(row, `Gallery/${filename}`, padded);
-        });
-        finalizeWall(row);
       }
+    }
+
+    async function loadManifestImages(row, imageFiles) {
+      const initialFiles = imageFiles.slice(0, initialVisibleImages);
+      if (initialFiles.length === 0) {
+        console.warn('Gallery manifest contained no image filenames.');
+        loadFallbackImages(row);
+        return;
+      }
+
+      initialFiles.forEach((filename, index) => {
+        const padded = String(index + 1).padStart(2, '0');
+        appendPhotoFrame(row, `Gallery/${filename}`, padded);
+      });
+
+      finalizeWall(row);
+
+      const remaining = imageFiles.slice(initialFiles.length);
+      if (remaining.length > 0) {
+        scheduleBackgroundManifestLoad(row, remaining);
+      }
+    }
+
+    function scheduleBackgroundManifestLoad(row, remaining) {
+      const loader = async () => {
+        for (const filename of remaining) {
+          appendPhotoFrame(row, `Gallery/${filename}`, String(row.children.length + 1).padStart(2, '0'));
+          if (row.children.length % 5 === 0) {
+            rebuildWallFromRow(row);
+          }
+          await new Promise((resolve) => setTimeout(resolve, manifestBatchDelay));
+        }
+        rebuildWallFromRow(row);
+      };
+
+      if (window.requestIdleCallback) {
+        window.requestIdleCallback(() => loader().catch(console.warn), { timeout: 200 });
+      } else {
+        setTimeout(() => loader().catch(console.warn), 50);
+      }
+    }
+
+    function rebuildWallFromRow(row) {
+      const currentPosition = scrollPosition;
+      renderWallFromSource(row);
+      scrollPosition = currentPosition;
+      updateWallPosition();
     }
 
     async function scanGalleryImages(row) {
@@ -204,6 +256,7 @@
       const maxConsecutiveMisses = 12;
       let consecutiveMisses = 0;
       const extensions = ['.jpg', '.JPG', '.jpeg', '.JPEG', '.png', '.PNG'];
+      let initialWallStarted = false;
 
       for (let i = 1; i <= maxPhotos; i++) {
         const paddedNum = i.toString().padStart(2, '0');
@@ -231,14 +284,26 @@
           consecutiveMisses++;
         }
 
+        if (!initialWallStarted && loadedPhotos >= initialVisibleImages) {
+          finalizeWall(row);
+          initialWallStarted = true;
+        }
+
+        if (initialWallStarted && loadedPhotos % 5 === 0) {
+          rebuildWallFromRow(row);
+        }
+
         if (consecutiveMisses >= maxConsecutiveMisses) break;
+        await new Promise((resolve) => setTimeout(resolve, 0));
       }
 
       if (loadedPhotos === 0) {
         console.warn('No Gallery images found — loading fallback images.');
         loadFallbackImages(row);
-      } else {
+      } else if (!initialWallStarted) {
         finalizeWall(row);
+      } else {
+        rebuildWallFromRow(row);
       }
     }
 
@@ -266,12 +331,10 @@
       finalizeWall(row);
     }
 
-    function finalizeWall(row) {
-      if (row.children.length === 0) return;
+    function renderWallFromSource(row) {
+      if (!row || row.children.length === 0) return;
 
       const wall = document.getElementById('main-wall');
-
-      // Create two rows and distribute discovered photos evenly between them
       const rowA = document.createElement('div');
       rowA.classList.add('photo-row');
       rowA.id = 'main-row-1';
@@ -282,8 +345,9 @@
 
       const children = Array.from(row.children);
       children.forEach((child, idx) => {
-        if (idx % 2 === 0) rowA.appendChild(child);
-        else rowB.appendChild(child);
+        const cloned = child.cloneNode(true);
+        if (idx % 2 === 0) rowA.appendChild(cloned);
+        else rowB.appendChild(cloned);
       });
 
       wall.innerHTML = '';
@@ -314,10 +378,15 @@
       ensureDup(rowB, baseWidthB);
 
       rowShift = baseWidth;
-      scrollPosition = 0;
-
+      if (!autoScrollStarted) {
+        autoScrollStarted = true;
+        autoScrollWall();
+      }
       updateWallPosition();
-      autoScrollWall();
+    }
+
+    function finalizeWall(row) {
+      renderWallFromSource(row);
     }
 
     function updateWallPosition() {
