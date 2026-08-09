@@ -165,55 +165,55 @@
       wall.appendChild(row);
 
       let photoNum = 1;
-      let failCount = 0;
       let loadedPhotos = 0;
 
-      function loadNextPhoto() {
-        if (failCount > 5) {
-          if (loadedPhotos === 0) {
-            console.warn('Could not load Gallery/photo01 to 05. Loading placeholders...');
-            loadFallbackImages(row);
-          } else {
-            finalizeWall(row);
-          }
-          return;
-        }
+      // Scan a reasonable range of photo indices and tolerate gaps.
+      // This attempts extensions for each index and collects any that exist.
+      (async () => {
+        const maxPhotos = 200; // upper bound to avoid infinite scanning
+        const maxConsecutiveMisses = 12; // allow some gaps but stop if too many in a row
+        let consecutiveMisses = 0;
 
-        const paddedNum = photoNum.toString().padStart(2, '0');
         const extensions = ['.jpg', '.JPG', '.jpeg', '.JPEG', '.png', '.PNG'];
-        let extIndex = 0;
 
-        function tryNextExtension() {
-          if (extIndex >= extensions.length) {
-            failCount++;
-            photoNum++;
-            loadNextPhoto(); 
-            return;
+        for (let i = 1; i <= maxPhotos; i++) {
+          const paddedNum = i.toString().padStart(2, '0');
+          let found = false;
+
+          for (const ext of extensions) {
+            const imagePath = `Gallery/photo${paddedNum}${ext}`;
+            // Promisified load check
+            const exists = await new Promise((resolve) => {
+              const img = new Image();
+              img.onload = () => resolve(true);
+              img.onerror = () => resolve(false);
+              img.src = imagePath;
+            });
+
+            if (exists) {
+              appendPhotoFrame(row, imagePath, paddedNum);
+              loadedPhotos++;
+              found = true;
+              consecutiveMisses = 0;
+              break;
+            }
           }
 
-          const imagePath = `Gallery/photo${paddedNum}${extensions[extIndex]}`;
-          const img = new Image();
+          if (!found) {
+            consecutiveMisses++;
+          }
 
-          img.onload = () => {
-            failCount = 0;
-            loadedPhotos++;
-            appendPhotoFrame(row, imagePath, paddedNum);
-            photoNum++;
-            loadNextPhoto(); 
-          };
-
-          img.onerror = () => {
-            extIndex++;
-            tryNextExtension(); 
-          };
-
-          img.src = imagePath;
+          // Stop scanning if we've seen too many missing files in a row
+          if (consecutiveMisses >= maxConsecutiveMisses) break;
         }
 
-        tryNextExtension();
-      }
-
-      loadNextPhoto();
+        if (loadedPhotos === 0) {
+          console.warn('No Gallery images found — loading fallback images.');
+          loadFallbackImages(row);
+        } else {
+          finalizeWall(row);
+        }
+      })();
     }
 
     function appendPhotoFrame(row, imagePath, altText) {
