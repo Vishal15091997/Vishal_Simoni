@@ -173,97 +173,14 @@ a {color:inherit;text-decoration:none;}
     color:var(--maroon);
 }
 
-/* Hamburger Menu Icon */
-.hamburger-menu {
-    display: none; /* Hidden by default, shown on mobile */
-    background: none;
-    border: none;
-    cursor: pointer;
-    padding: 0.5rem;
-    z-index: 40; /* Above dropdown */
-}
-.hamburger-menu span {
-    display: block;
-    width: 25px;
-    height: 3px;
-    background-color: #fff;
-    margin: 5px 0;
-    transition: all 0.3s ease;
-}
-
-/* Mobile Nav Overlay */
-.mobile-nav-overlay {
-    display: flex; /* Always flex, visibility controlled by transform/visibility */
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(107, 0, 0, 0.95); /* Darker background for mobile menu */
-    backdrop-filter: blur(15px);
-    z-index: 35;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    visibility: hidden; /* Hide by default */
-    transform: translateX(100%); /* Start off-screen */
-    transition: transform 0.4s ease-out;
-}
-
-body.mobile-menu-open .mobile-nav-overlay {
-    visibility: visible; /* Show when menu is open */
-    transform: translateX(0); /* Slide in */
-}
-
-/* Adjust nav-links inside mobile overlay */
-.mobile-nav-overlay .nav-links {
-    flex-direction: column;
-    gap: 1.5rem;
-    text-align: center;
-}
-
-.mobile-nav-overlay .nav-links > a,
-.mobile-nav-overlay .dropdown > a {
-    font-size: 1.2rem; /* Larger font for mobile */
-    padding: 0.8rem 1.5rem;
-    border-radius: 8px;
-    width: auto; /* Allow natural width */
-}
-
-/* Adjust dropdown within mobile overlay */
-.mobile-nav-overlay .dropdown {
-    width: 100%; /* Full width for dropdown parent */
-    flex-direction: column;
-    align-items: center;
-}
-
-.mobile-nav-overlay .dropdown-content {
-    position: static; /* No absolute positioning in mobile menu */
-    display: flex; /* Always show dropdown content in mobile menu */
-    flex-direction: column;
-    background: none; /* No separate background for sub-menu */
-    box-shadow: none;
-    border: none;
-    padding: 0.5rem 0;
-    min-width: unset; /* Remove min-width constraint */
-}
-
-.mobile-nav-overlay .dropdown-content a {
-    font-size: 1rem; /* Slightly smaller for sub-items */
-    padding: 0.5rem 1rem !important;
-    color: rgba(255, 255, 255, 0.9); /* Lighter color for sub-items */
-}
-.mobile-nav-overlay .dropdown-content a:hover {
-    color: var(--gold) !important;
-    background: rgba(255, 255, 255, 0.05);
-}
-
+/* Desktop Hero */
 .hero {position:relative;height:75vh;display:flex;align-items:center;justify-content:center;text-align:center;background:url('images/hero.jpg') center/cover no-repeat;}
 .hero-overlay {position:absolute;inset:0;background:linear-gradient(160deg,rgba(0,0,0,0.2),rgba(0,0,0,0.4));}
 .glass-card {position:relative;z-index:2;max-width:560px;margin:0 1rem;padding:2rem;backdrop-filter:blur(12px);background: rgba(255, 255, 255, 0.92);border: 1px solid rgba(255, 255, 255, 0.4);box-shadow: 0 30px 60px rgba(0,0,0,0.12);border-radius:4px;}
 .glass-card h1 {font-family:'Cormorant Garamond', serif;font-size:3.5rem;margin-bottom:1.5rem;color:var(--maroon);font-weight:400;letter-spacing: 2px;}
 .glass-card p {margin-bottom:2rem;color:var(--text);font-size:1.2rem;font-family:'Cormorant Garamond', serif;font-style: italic;line-height:1.8;letter-spacing:0.5px;}
 
+/* Desktop layout defaults */
 .info-grid {display:grid;grid-template-columns:1fr 1fr;gap:2rem;margin:1rem auto 2rem;align-items:start;}
 .info-grid article {text-align:center;}
 .info-grid article:first-child {position:relative;padding-right:2rem;}
@@ -395,6 +312,33 @@ body.mobile-menu-open .mobile-nav-overlay {
   color: var(--maroon);
 }
 
+.photo-frame {
+  position: relative;
+  flex-shrink: 0;
+  height: 100%;
+  aspect-ratio: 1.1;
+  overflow: hidden;
+  border-radius: 12px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
+  background-color: var(--ivory);
+}
+
+.photo-frame img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  border-radius: 12px;
+  border: 2px solid var(--gold);
+  display: block;
+}
+
+@media (max-width: 768px) {
+  .photo-frame {
+    aspect-ratio: 1.05;
+  }
+}
+
 /* Ribbon Gallery Track Styles */
 .track-wrapper {
   width: 100%;
@@ -428,8 +372,9 @@ body.mobile-menu-open .mobile-nav-overlay {
   cursor: grab;
 }
 
-.track::-webkit-scrollbar { display: none; }
-
+.track::-webkit-scrollbar {
+  display: none;
+}
 
 .track__item {
   height: 100%;
@@ -437,6 +382,8 @@ body.mobile-menu-open .mobile-nav-overlay {
   flex-shrink: 0;
   background: rgba(139, 0, 0, 0.05); /* Placeholder color while heavy images decode */
   border-radius: 12px;
+  overflow: hidden;
+  border: 2px solid var(--gold);
 }
 
 .track__item img {
@@ -763,149 +710,6 @@ body.mobile-menu-open .mobile-nav-overlay {
 
 .diamond-divider { width: 8px; height: 8px; background-color: var(--gold); transform: rotate(45deg); flex-shrink: 0; opacity: 0.7; }
 
-@media (max-width: 768px) {
-  .topbar .nav-links { display: none; }
-  .hamburger-menu { display: block; }
-  
-  .footer-compact-row {
-    grid-template-columns: 1fr;
-    gap: 1.5rem;
-    padding: 1rem 0;
-  }
-  
-  .footer-quote-inline {
-    border: none;
-    border-top: 1px solid rgba(212,175,55,0.3);
-    border-bottom: 1px solid rgba(212,175,55,0.3);
-    padding: 1.2rem 0;
-    width: 100%;
-  }
-  
-  .countdown, .wedding-seal { justify-self: center; justify-content: center; }
-
-  .cards-container {
-    flex-direction: column;
-    align-items: center;
-    gap: 2.5rem;
-  }
-  .card-divider {
-    width: 60%;
-    height: 3px;
-    margin: 0;
-    background: linear-gradient(90deg, transparent 0%, var(--gold) 20%, var(--gold) 80%, transparent 100%);
-  }
-}
-
-@media (max-width: 420px) {
-  .countdown { grid-template-columns: 1fr 1fr; }
-  .wedding-seal { justify-self: center; }
-}
-
-@media (max-width: 640px) {
-  .topbar {padding:0.55rem 0;}
-  .glass-card {padding:1.5rem 1rem;}
-  .glass-card h1 {font-size:1.8rem;}
-  .info-grid {margin:1.5rem auto;}
-  .countdown {flex-wrap:wrap;gap:0.7rem;}
-  .venue-sections { grid-template-columns: 1fr; gap: 1rem; }
-  .events-details { grid-template-columns: 1fr; }
-  
-  .loading-text { font-size: 1.2rem; letter-spacing: 3px; }
-  .countdown div { min-width: 55px; padding: 0.3rem 0.5rem; }
-  .countdown span { font-size: 1.2rem; }
-  .heart-divider { width: 24px; height: 24px; }
-  .story-frame { width: 75px; height: 75px; }
-  .story-gallery { gap: 10px; }
-}
-
-/* Engagement faux 3D scroll slider */
-.faux-3d-slider {
-  position: relative;
-  width: 100%;
-  height: 620px;
-  margin: 0 auto;
-  padding: 0 0 5px 0;
-  perspective: 1200px;
-  overflow: hidden;
-  display: block;
-  background: transparent;
-  border: none;
-  border-radius: 0;
-}
-
-.faux-3d-track {
-  position: relative;
-  width: 100%;
-  height: 505px;
-  transform-style: preserve-3d;
-  overflow: hidden;
-}
-
-.faux-3d-card {
-  position: absolute;
-  top: 100%;
-  left: 50%;
-  width: 280px;
-  height: 480px;
-  margin-top: -240px;
-  margin-left: -140px;
-  transform-style: preserve-3d;
-  transition: transform 1.2s ease, opacity 1.2s ease;
-  border-radius: 14px;
-  overflow: hidden;
-  box-shadow: 0 18px 35px rgba(0,0,0,0.25);
-  opacity: 0.4;
-  backface-visibility: hidden;
-  will-change: transform, opacity;
-}
-
-.faux-3d-card img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  display: block;
-}
-
-.faux-3d-card.active,
-.faux-3d-card.near {
-  opacity: 1;
-}
-
-.faux-3d-card .overlay {
-  display: none;
-}
-
-@media (max-width: 768px) {
-  .faux-3d-slider {
-    height: 500px;
-    padding: 0 0 5px 0;
-  }
-  .faux-3d-track {
-    height: 400px;
-  }
-  .faux-3d-card {
-    width: 220px;
-    height: 360px;
-    margin-top: -180px;
-    margin-left: -110px;
-  }
-}
-
-@media (max-width: 480px) {
-  .faux-3d-slider {
-    height: 410px;
-    padding: 0 0 5px 0;
-  }
-  .faux-3d-track {
-    height: 305px;
-  }
-  .faux-3d-card {
-    width: 160px;
-    height: 280px;
-    margin-top: -140px;
-    margin-left: -80px;
-  }
-}
 
 /* History Page Layout */
 .history-row {

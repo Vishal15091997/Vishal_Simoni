@@ -9,6 +9,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
   const openLightbox = (src) => {
     lightboxImg.src = src;
+    lightboxImg.srcset = `${src} 1x, ${src} 2x`;
+    lightboxImg.loading = 'lazy';
+    lightboxImg.decoding = 'async';
     lightboxOverlay.classList.add('active');
   };
 

@@ -21,6 +21,27 @@
       box-shadow: inset 0 0 150px rgba(0,0,0,0.8);
     }
 
+    @media (max-width: 768px) {
+      .gallery-container {
+        perspective: none;
+      }
+      .wall-container {
+        transform: rotateY(0deg) !important;
+        padding: 0 12px;
+      }
+      .photo-row {
+        height: 170px;
+        gap: 12px;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .photo-row {
+        height: 130px;
+        gap: 8px;
+      }
+    }
+
     .gallery-container::before {
       content: "";
       position: absolute;
@@ -98,36 +119,7 @@
         </div>
         <a href="gallery.html">Gallery</a>
       </div>
-      <button class="hamburger-menu" aria-label="Toggle navigation menu">
-        <span></span>
-        <span></span>
-        <span></span>
-      </button>
     </nav>
-    <div class="mobile-nav-overlay" id="mobileNavOverlay">
-      <nav class="nav-links">
-        <a href="index.html">Home</a>
-        <a href="couple.html">The Couple</a>
-        <div class="dropdown">
-          <a href="event.html">Our Story</a>
-          <div class="dropdown-content">
-            <a href="roka.html">Roka</a>
-            <a href="engagement.html">Engagement</a>
-            <a href="sangeet.html">Sangeet</a>
-            <a href="haldi.html">Haldi</a>
-            <a href="wedding.html">Wedding</a>
-            <a href="reception.html">Reception</a>
-          </div>
-        </div>
-        <div class="dropdown">
-          <a href="venue.html">Venue</a>
-          <div class="dropdown-content">
-            <a href="khajuraho-history.html">Khajuraho History</a>
-          </div>
-        </div>
-        <a href="gallery.html">Gallery</a>
-      </nav>
-    </div>
   </header>
 
   <main style="display: flex; flex-direction: column;">
@@ -155,7 +147,6 @@
     </div>
   </footer>
   <script src="countdown.js"></script>
-  <script src="mobile-menu.js"></script>
   <script>
     let scrollPosition = 0;
     let isManualScrolling = false;
@@ -304,7 +295,9 @@
 
     function autoScrollWall() {
       if (!isManualScrolling) {
-        scrollPosition -= 0.6; // Adjust auto-scroll speed here
+        const isMobile = window.innerWidth <= 768;
+        const autoScrollSpeed = isMobile ? 0.25 : 0.6;
+        scrollPosition -= autoScrollSpeed;
         updateWallPosition();
       }
       requestAnimationFrame(autoScrollWall);
@@ -313,7 +306,9 @@
     window.addEventListener('wheel', (event) => {
       isManualScrolling = true;
 
-      scrollPosition -= event.deltaY * 0.8;
+      const isMobile = window.innerWidth <= 768;
+      const scrollFactor = isMobile ? 0.35 : 0.8;
+      scrollPosition -= event.deltaY * scrollFactor;
       updateWallPosition();
 
       clearTimeout(scrollTimeout);
@@ -333,5 +328,6 @@
     </div>
   </div>
   <script src="lightbox.js"></script>
+  <script src="responsive-imgs.js"></script>
 </body>
 </html>
