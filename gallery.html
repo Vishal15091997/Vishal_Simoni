@@ -18,7 +18,8 @@
       overflow: hidden;
       background: radial-gradient(circle at 50% 50%, #b30000 0%, #4a0000 70%, #1a0000 100%);
       position: relative;
-      box-shadow: inset 0 0 150px rgba(0,0,0,0.8);
+      /* subtle inner shading, avoid hiding image shadows */
+      box-shadow: inset 0 0 60px rgba(0,0,0,0.55);
     }
 
     @media (max-width: 768px) {
@@ -26,7 +27,6 @@
         perspective: none;
       }
       .wall-container {
-        transform: rotateY(0deg) !important;
         padding: 0 12px;
       }
       .photo-row {
@@ -46,24 +46,29 @@
       content: "";
       position: absolute;
       top: 0; left: 0; right: 0; bottom: 0;
-      background: linear-gradient(180deg, rgba(255, 255, 255, 0.12) 0%, transparent 50%);
+      /* reduce overlay opacity so image shadows remain visible */
+      background: linear-gradient(180deg, rgba(255, 255, 255, 0.06) 0%, transparent 50%);
       pointer-events: none;
       z-index: 2;
     }
 
     .wall-container {
       position: relative;
-      transform-style: preserve-3d;
-      transform: rotateY(8deg);
+      left: 0;
       width: fit-content;
       min-width: 100%;
       padding: 0 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 18px;
+      will-change: left;
+      backface-visibility: hidden;
     }
 
     .photo-row {
       position: relative;
       display: flex;
-      height: 280px;
+      height: 200px;
       gap: 20px;
     }
 
@@ -72,22 +77,27 @@
       flex-shrink: 0;
       height: 100%;
       aspect-ratio: 1.1;
-      -webkit-box-reflect: below 10px linear-gradient(to bottom, rgba(0,0,0,0) 0%, rgba(0,0,0,0) 60%, rgba(0,0,0,0.4) 100%);
+      overflow: visible;
+      border-radius: 8px;
     }
 
     .photo-frame img {
       width: 100%;
       height: 100%;
       object-fit: cover;
-      box-shadow: 0 8px 16px rgba(139, 0, 0, 0.3);
+      box-shadow: 0 12px 28px rgba(0, 0, 0, 0.36);
       border: 2px solid var(--gold);
       border-radius: 8px;
       background-color: var(--ivory);
+      backface-visibility: hidden;
+      transform: translateZ(0);
+      will-change: transform, box-shadow;
+      display: block;
     }
 
     @media (max-width: 768px) {
       .photo-row {
-        height: 150px;
+        height: 140px;
         gap: 10px;
       }
     }
@@ -155,7 +165,7 @@
     let initialScrollPosition = 0;
     let hasScrolledPastStart = false;
 
-    function createPhotoWall() {
+    async function createPhotoWall() {
       const wall = document.getElementById('main-wall');
       wall.innerHTML = ''; // Clear existing content
 
@@ -164,56 +174,72 @@
       row.id = 'main-row';
       wall.appendChild(row);
 
-      let photoNum = 1;
-      let loadedPhotos = 0;
-
-      // Scan a reasonable range of photo indices and tolerate gaps.
-      // This attempts extensions for each index and collects any that exist.
-      (async () => {
-        const maxPhotos = 200; // upper bound to avoid infinite scanning
-        const maxConsecutiveMisses = 12; // allow some gaps but stop if too many in a row
-        let consecutiveMisses = 0;
-
-        const extensions = ['.jpg', '.JPG', '.jpeg', '.JPEG', '.png', '.PNG'];
-
-        for (let i = 1; i <= maxPhotos; i++) {
-          const paddedNum = i.toString().padStart(2, '0');
-          let found = false;
-
-          for (const ext of extensions) {
-            const imagePath = `Gallery/photo${paddedNum}${ext}`;
-            // Promisified load check
-            const exists = await new Promise((resolve) => {
-              const img = new Image();
-              img.onload = () => resolve(true);
-              img.onerror = () => resolve(false);
-              img.src = imagePath;
-            });
-
-            if (exists) {
-              appendPhotoFrame(row, imagePath, paddedNum);
-              loadedPhotos++;
-              found = true;
-              consecutiveMisses = 0;
-              break;
-            }
-          }
-
-          if (!found) {
-            consecutiveMisses++;
-          }
-
-          // Stop scanning if we've seen too many missing files in a row
-          if (consecutiveMisses >= maxConsecutiveMisses) break;
-        }
-
-        if (loadedPhotos === 0) {
-          console.warn('No Gallery images found — loading fallback images.');
-          loadFallbackImages(row);
+      let imageFiles = [];
+      try {
+        const response = await fetch('Gallery/manifest.json', { cache: 'no-store' });
+        if (response.ok) {
+          imageFiles = await response.json();
         } else {
-          finalizeWall(row);
+          console.warn('Gallery manifest fetch failed with status', response.status);
         }
-      })();
+      } catch (error) {
+        console.warn('Gallery manifest fetch failed', error);
+      }
+
+      if (!Array.isArray(imageFiles) || imageFiles.length === 0) {
+        console.warn('Gallery manifest empty or missing; falling back to scan mode.');
+        await scanGalleryImages(row);
+      } else {
+        imageFiles.forEach((filename, index) => {
+          const padded = String(index + 1).padStart(2, '0');
+          appendPhotoFrame(row, `Gallery/${filename}`, padded);
+        });
+        finalizeWall(row);
+      }
+    }
+
+    async function scanGalleryImages(row) {
+      let loadedPhotos = 0;
+      const maxPhotos = 200; // upper bound to avoid infinite scanning
+      const maxConsecutiveMisses = 12;
+      let consecutiveMisses = 0;
+      const extensions = ['.jpg', '.JPG', '.jpeg', '.JPEG', '.png', '.PNG'];
+
+      for (let i = 1; i <= maxPhotos; i++) {
+        const paddedNum = i.toString().padStart(2, '0');
+        let found = false;
+
+        for (const ext of extensions) {
+          const imagePath = `Gallery/photo${paddedNum}${ext}`;
+          const exists = await new Promise((resolve) => {
+            const img = new Image();
+            img.onload = () => resolve(true);
+            img.onerror = () => resolve(false);
+            img.src = imagePath;
+          });
+
+          if (exists) {
+            appendPhotoFrame(row, imagePath, paddedNum);
+            loadedPhotos++;
+            found = true;
+            consecutiveMisses = 0;
+            break;
+          }
+        }
+
+        if (!found) {
+          consecutiveMisses++;
+        }
+
+        if (consecutiveMisses >= maxConsecutiveMisses) break;
+      }
+
+      if (loadedPhotos === 0) {
+        console.warn('No Gallery images found — loading fallback images.');
+        loadFallbackImages(row);
+      } else {
+        finalizeWall(row);
+      }
     }
 
     function appendPhotoFrame(row, imagePath, altText) {
@@ -243,54 +269,71 @@
     function finalizeWall(row) {
       if (row.children.length === 0) return;
 
-      // Mathematically calculate width to prevent browser painting delays from breaking the loop
-      const isMobile = window.innerWidth <= 768;
-      const itemHeight = isMobile ? 130 : 240;
-      const gap = isMobile ? 10 : 20;
-      const itemWidth = itemHeight * 1.1; // Using CSS aspect-ratio 1.1
-      
-      const baseWidth = (itemWidth + gap) * row.children.length;
-      
-      // Optimized for memory: Only duplicate what is strictly necessary to fill the screen
-      const minRequiredWidth = window.innerWidth * 2;
-      const duplicatesNeeded = Math.ceil(minRequiredWidth / baseWidth);
+      const wall = document.getElementById('main-wall');
+
+      // Create two rows and distribute discovered photos evenly between them
+      const rowA = document.createElement('div');
+      rowA.classList.add('photo-row');
+      rowA.id = 'main-row-1';
+
+      const rowB = document.createElement('div');
+      rowB.classList.add('photo-row');
+      rowB.id = 'main-row-2';
 
       const children = Array.from(row.children);
-      for (let i = 0; i < duplicatesNeeded; i++) {
-        children.forEach(child => {
-          row.appendChild(child.cloneNode(true));
-        });
-      }
+      children.forEach((child, idx) => {
+        if (idx % 2 === 0) rowA.appendChild(child);
+        else rowB.appendChild(child);
+      });
+
+      wall.innerHTML = '';
+      wall.appendChild(rowA);
+      wall.appendChild(rowB);
+
+      // Compute sizing using same measurements as CSS
+      const isMobile = window.innerWidth <= 768;
+      const itemHeight = isMobile ? 140 : 200; // matches CSS in this file
+      const gap = isMobile ? 10 : 20;
+      const itemWidth = itemHeight * 1.1;
+
+      const baseWidthA = (itemWidth + gap) * rowA.children.length || 0.0001;
+      const baseWidthB = (itemWidth + gap) * rowB.children.length || 0.0001;
+      const baseWidth = Math.max(baseWidthA, baseWidthB);
+
+      const minRequiredWidth = window.innerWidth * 2;
+
+      const ensureDup = (rEl, baseW) => {
+        if (!rEl || rEl.children.length === 0) return;
+        let duplicatesNeeded = Math.ceil(minRequiredWidth / baseW);
+        duplicatesNeeded = Math.max(1, duplicatesNeeded);
+        const originals = Array.from(rEl.children);
+        for (let i = 0; i < duplicatesNeeded; i++) originals.forEach(ch => rEl.appendChild(ch.cloneNode(true)));
+      };
+
+      ensureDup(rowA, baseWidthA);
+      ensureDup(rowB, baseWidthB);
 
       rowShift = baseWidth;
-      
-      // Center the first photo on load (accounting for the 20px container padding)
-      initialScrollPosition = (window.innerWidth / 2) - (itemWidth / 2) - 20;
-      scrollPosition = initialScrollPosition;
-      hasScrolledPastStart = false;
-      
+      scrollPosition = 0;
+
       updateWallPosition();
       autoScrollWall();
     }
 
     function updateWallPosition() {
-      const row = document.getElementById('main-row');
+      const wallEl = document.getElementById('main-wall');
 
-      if (rowShift) {
-        // Once the initial empty space scrolls out of view, enforce strict zero-boundary wrapping
-        if (scrollPosition <= 0) hasScrolledPastStart = true;
+      if (!rowShift || !wallEl) return;
 
-        if (scrollPosition <= -rowShift) scrollPosition += rowShift;
-        
-        if (hasScrolledPastStart && scrollPosition > 0) {
-          scrollPosition -= rowShift;
-        } else if (!hasScrolledPastStart && scrollPosition > initialScrollPosition) {
-          scrollPosition -= rowShift;
-          hasScrolledPastStart = true;
-        }
-
-        if (row) row.style.transform = `translateX(${scrollPosition}px)`;
+      if (scrollPosition <= -rowShift) {
+        scrollPosition += rowShift;
       }
+
+      if (scrollPosition >= rowShift) {
+        scrollPosition -= rowShift;
+      }
+
+      wallEl.style.left = `${scrollPosition}px`;
     }
 
     function autoScrollWall() {
